@@ -34,8 +34,10 @@ tags: [email]
 
 ## Attachments
 - [Tree_removal_close-up.png](attachments/Tree_removal_close-up.png)
-- [00000900_Proposal_-_Backyard_XL8_-_Er....pdf](attachments/00000900_Proposal_-_Backyard_XL8_-_Erica_%26_James_Delaney_-_251_Toro%0A_Canyon_Rd%2C_Carpinteria_CA_93013_-_20250401.pdf)
-- [Meeting_summary_for_Erica_&_James_Sam....pdf](attachments/Meeting_summary_for_Erica_%26_James_Samara_Proposal_Review%0A_%2804_01_2025%29.pdf)
+- [00000900_Proposal_-_Backyard_XL8_-_Er....pdf](attachments/00000900_Proposal_-_Backyard_XL8_-_Erica_&_James_Delaney_-_251_Toro
+_Canyon_Rd,_Carpinteria_CA_93013_-_20250401.pdf)
+- [Meeting_summary_for_Erica_&_James_Sam....pdf](attachments/Meeting_summary_for_Erica_&_James_Samara_Proposal_Review
+_(04_01_2025).pdf)
 - [Dog_ear_garden_gate.jpg](attachments/Dog_ear_garden_gate.jpg)
 - [Rolling_access_gate_on_roller_wheel.webp](attachments/Rolling_access_gate_on_roller_wheel.webp)
 - [canibuild-map-1743562499794.png](attachments/canibuild-map-1743562499794.png)

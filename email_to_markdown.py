@@ -531,9 +531,8 @@ tags: [email]
                 
             display_names[attachment] = display_name
             
-        # Create URL-safe versions for links
-        from urllib.parse import quote
-        url_encoded_attachments = {attachment: quote(attachment) for attachment in attachments}
+        # Use original filenames for links (Obsidian handles special characters fine)
+        url_encoded_attachments = {attachment: attachment for attachment in attachments}
             
         # Normalize whitespace in body content
         # Replace multiple consecutive blank lines with a single blank line
