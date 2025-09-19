@@ -1,13 +1,14 @@
 ---
-EmailSubject: 'One Bedroom Backyard Proposal'
-EmailTo: 'erica delaney <erica.altman@gmail.com>, James Delaney <james@delaney.id>'
+EmailSubject: "One Bedroom Backyard Proposal"
+EmailTo: "erica delaney <erica.altman@gmail.com>, James Delaney <james@delaney.id>"
 
-EmailFrom: 'HeatherJo Bowman <heatherjo.bowman@samara.com>'
-EmailSentDate: 2025-04-11 17:45
-emlFile: 'One Bedroom Backyard Proposal.eml'
+EmailFrom: "HeatherJo Bowman <heatherjo.bowman@samara.com>"
+EmailSentDate: "2025-04-11 17:45"
+emlFile: "One Bedroom Backyard Proposal.eml"
 
 attachments:
-  - "attachments/00000906_Proposal_-_One_Bedroom_Backyard_-_Erica_James_Delaney_-_251_toro_canyon_Rd_Carpinteria_CA_93013_-_20250411.pdf"
+  - "attachments/00000906_Proposal_-_One_Bedroom_Backyard_-_Erica_&_James_Delaney_-_251_toro_canyon_Rd_Carpinteria_CA_93013_-_20250411.pdf"
+  - "attachments/embedded_image_f_m9dh8h1q0.pdf"
 
 
 tags: [email]
@@ -22,7 +23,8 @@ tags: [email]
 
 
 ## Attachments
-- [00000906_Proposal_-_One_Bedroom_Backy....pdf](attachments/00000906_Proposal_-_One_Bedroom_Backyard_-_Erica_James_Delaney_-%0A_251_toro_canyon_Rd_Carpinteria_CA_93013_-_20250411.pdf)
+- [00000906_Proposal_-_One_Bedroom_Backy....pdf](attachments/00000906_Proposal_-_One_Bedroom_Backyard_-_Erica_%26_James_Delaney_-%0A_251_toro_canyon_Rd_Carpinteria_CA_93013_-_20250411.pdf)
+- [embedded_image_f_m9dh8h1q0.pdf](attachments/embedded_image_f_m9dh8h1q0.pdf)
 
 
 

@@ -13,9 +13,9 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "OutputApproved/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi.md",
-                "mode": "source",
-                "source": false
+                "file": "OutputTesting/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi.md",
+                "mode": "preview",
+                "source": true
               },
               "icon": "lucide-file",
               "title": "📧 2025-03-14 Copilot Implementation Launch Call | CounselFi"
@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 566.5
   },
   "right": {
     "id": "a85285bd82b0e04c",
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "OutputApproved/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi.md",
+                "file": "OutputTesting/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -113,7 +113,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "OutputApproved/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi.md",
+                "file": "OutputTesting/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -142,7 +142,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "OutputApproved/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi.md",
+                "file": "OutputTesting/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -171,50 +171,51 @@
   },
   "active": "769c56c2892ace07",
   "lastOpenFiles": [
-    "OutputTesting/funky_characters/📧 2025-09-13 Re_ dawn's user not in hs/📧 2025-09-13 Re_ dawn's user not in hs.md",
-    "OutputApproved/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/attachments/CounselFi & ZoomInfo _ Copilot Launch with Hubspot.pdf",
-    "OutputApproved/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi.md",
-    "OutputApproved/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi.eml",
-    "OutputApproved/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/attachments",
-    "OutputApproved/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi",
-    "OutputApproved/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi.md",
-    "OutputTesting/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi.eml",
-    "OutputTesting/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi.md",
-    "OutputTesting/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/attachments/embedded_image_f_m87w2y1v0.pdf",
     "OutputTesting/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/attachments/CounselFi_&_ZoomInfo___Copilot_Launch_with_Hubspot.pdf",
-    "OutputTesting/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/attachments",
-    "OutputTesting/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi",
-    "Examples/Copilot Implementation Launch Call | CounselFi.eml",
+    "OutputTesting/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi.md",
+    "OutputApproved/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi.md",
+    "attachments/CounselFi_%26_ZoomInfo___Copilot_Launch_with_Hubspot.pdf.md",
+    "OutputApproved/📧 2025-04-11 One Bedroom Backyard Proposal/📧 2025-04-11 One Bedroom Backyard Proposal.md",
+    "attachments/00000906_Proposal_-_One_Bedroom_Backyard_-_Erica_%26_James_Delaney_-\n_251_toro_canyon_Rd_Carpinteria_CA_93013_-_20250411.pdf.md",
+    "attachments",
+    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/📧 2025-04-01 Your Samara XL8 Proposal.eml",
+    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/📧 2025-04-01 Your Samara XL8 Proposal.md",
+    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments/embedded_image_f_m8zcdrqi5.png",
+    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments/embedded_image_f_m8zcbpad4.webp",
+    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments/embedded_image_f_m8zcbsba5.jpeg",
+    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments/embedded_image_f_m8zc9lxb3.pdf",
+    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments/embedded_image_f_m8zc5lev2.pdf",
+    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments/embedded_image_f_m8zc5h021.png",
+    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments/canibuild-map-1743562499794.png",
+    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments/Rolling_access_gate_on_roller_wheel.webp",
+    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments/Dog_ear_garden_gate.jpg",
+    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments/Meeting_summary_for_Erica_&_James_Samara_Proposal_Review\n_(04_01_2025).pdf",
+    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments/00000900_Proposal_-_Backyard_XL8_-_Erica_&_James_Delaney_-_251_Toro\n_Canyon_Rd,_Carpinteria_CA_93013_-_20250401.pdf",
+    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments/Tree_removal_close-up.png",
+    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments",
+    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal",
+    "OutputTesting/📧 2025-03-24 Rippling Implementation_ CounselFi - Introduction to Support/📧 2025-03-24 Rippling Implementation_ CounselFi - Introduction to Support.eml",
+    "OutputTesting/📧 2025-03-24 Rippling Implementation_ CounselFi - Introduction to Support/📧 2025-03-24 Rippling Implementation_ CounselFi - Introduction to Support.md",
+    "OutputTesting/📧 2025-03-24 Rippling Implementation_ CounselFi - Introduction to Support/attachments/image.png",
+    "OutputTesting/📧 2025-03-24 Rippling Implementation_ CounselFi - Introduction to Support/attachments/embedded_image_ii_m73jm66e0.png",
+    "OutputTesting/📧 2025-03-24 Rippling Implementation_ CounselFi - Introduction to Support/attachments",
+    "OutputTesting/📧 2025-04-11 One Bedroom Backyard Proposal/📧 2025-04-11 One Bedroom Backyard Proposal.md",
+    "OutputApproved/📧 2025-04-01 Your Samara XL8 Proposal/📧 2025-04-01 Your Samara XL8 Proposal.md",
+    "OutputApproved/📧 2025-03-24 Rippling Implementation_ CounselFi - Introduction to Support/📧 2025-03-24 Rippling Implementation_ CounselFi - Introduction to Support.md",
+    "OutputTesting/funky_characters/📧 2025-09-13 Re_ dawn's user not in hs/📧 2025-09-13 Re_ dawn's user not in hs.md",
+    "OutputApproved/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi.md",
     "OutputApproved/📧 2025-09-13 Re_ dawn's user not in hs.md",
     "OutputApproved/📧 2025-04-11 Proposal for Planning and Permitting Services.md",
     "OutputApproved/📧 2025-04-11 One Bedroom Backyard Proposal.md",
     "OutputApproved/📧 2025-04-10 Reclaim Your Time With AI - Workshop Follow Up.md",
     "OutputApproved/📧 2025-04-01 Your Samara XL8 Proposal.md",
     "OutputApproved/📧 2025-03-24 Rippling Implementation_ CounselFi - Introduction to Support.md",
-    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/📧 2025-04-01 Your Samara XL8 Proposal.md",
-    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments/embedded_image_f_m8zcdrqi5.png",
-    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments/embedded_image_f_m8zcbpad4.webp",
-    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments/embedded_image_f_m8zcbsba5.jpeg",
-    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments/embedded_image_f_m8zc5h021.png",
-    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments/canibuild-map-1743562499794.png",
-    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments/Rolling_access_gate_on_roller_wheel.webp",
-    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments/Dog_ear_garden_gate.jpg",
-    "OutputTesting/📧 2025-04-01 Your Samara XL8 Proposal/attachments/Tree_removal_close-up.png",
-    "OutputTesting/📧 2025-03-24 Rippling Implementation_ CounselFi - Introduction to Support/📧 2025-03-24 Rippling Implementation_ CounselFi - Introduction to Support.md",
-    "OutputTesting/📧 2025-03-24 Rippling Implementation_ CounselFi - Introduction to Support/attachments/image.png",
-    "OutputTesting/📧 2025-03-24 Rippling Implementation_ CounselFi - Introduction to Support/attachments/embedded_image_ii_m73jm66e0.png",
     "OutputTesting/📧 2025-04-10 Reclaim Your Time With AI - Workshop Follow Up/📧 2025-04-10 Reclaim Your Time With AI - Workshop Follow Up.md",
     "OutputTesting/📧 2025-09-13 Re_ dawn's user not in hs/📧 2025-09-13 Re_ dawn's user not in hs.md",
     "OutputTesting/📧 2025-04-11 Proposal for Planning and Permitting Services/📧 2025-04-11 Proposal for Planning and Permitting Services.md",
-    "OutputTesting/📧 2025-04-11 One Bedroom Backyard Proposal/📧 2025-04-11 One Bedroom Backyard Proposal.md",
-    "OutputApproved/📧 2025-04-11 One Bedroom Backyard Proposal/📧 2025-04-11 One Bedroom Backyard Proposal.md",
-    "OutputApproved/📧 2025-04-01 Your Samara XL8 Proposal/📧 2025-04-01 Your Samara XL8 Proposal.md",
-    "OutputApproved/📧 2025-03-24 Rippling Implementation_ CounselFi - Introduction to Support/📧 2025-03-24 Rippling Implementation_ CounselFi - Introduction to Support.md",
     "OutputApproved/funky_characters/📧 2025-09-13 Re_ dawn's user not in hs.md",
     "OutputTesting/regular_attachment_pdf/📧 2025-04-10 Reclaim Your Time With AI - Workshop Follow Up/📧 2025-04-10 Reclaim Your Time With AI - Workshop Follow Up.md",
     "OutputTesting/regular_attachment_pdf/📧 2025-04-11 Proposal for Planning and Permitting Services/📧 2025-04-11 Proposal for Planning and Permitting Services.md",
-    "OutputTesting/regular_attachment_pdf/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi.md",
-    "OutputTesting/embedded_images/📧 2025-04-01 Your Samara XL8 Proposal/📧 2025-04-01 Your Samara XL8 Proposal.md",
-    "OutputTesting/embedded_images/📧 2025-03-24 Rippling Implementation_ CounselFi - Introduction to Support/📧 2025-03-24 Rippling Implementation_ CounselFi - Introduction to Support.md"
+    "OutputTesting/regular_attachment_pdf/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi/📧 2025-03-14 Copilot Implementation Launch Call | CounselFi.md"
   ]
 }
