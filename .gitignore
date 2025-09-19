@@ -1,0 +1,40 @@
+# Testing output directory - temporary files created during testing
+OutputTesting/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# macOS system files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Log files
+*.log
+/tmp/email_to_md_debug.log
+/tmp/email_test_results.log
+/tmp/eml_to_obsidian_test.log
+/tmp/eml_diff.txt
+
+# Temporary files
+*.tmp
+*.temp
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Virtual environments
+venv/
+env/
+ENV/

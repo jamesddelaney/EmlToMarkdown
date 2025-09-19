@@ -1,0 +1,31 @@
+---
+EmailSubject: '{{ subject }}'
+EmailTo: '{{ to_addr | replace('\n', ' ') }}'
+{% if cc_addr %}EmailCc: '{{ cc_addr | replace('\n', ' ') }}'{% endif %}
+EmailFrom: '{{ from_addr | replace('\n', ' ') }}'
+EmailSentDate: {{ formatted_date }} {{ formatted_time }}
+{% if eml_file %}emlFile: '{{ eml_file }}'{% endif %}
+{% if attachments %}
+attachments:
+{% for attachment in attachments %}  - "attachments/{{ attachment | replace('\n', '') }}"
+{% endfor %}
+{% endif %}
+tags: [email]
+---
+## Headers
+
+**Subject:** {{ subject }}
+**From:** {{ from_addr }}
+**Date:** {{ formatted_date }} {{ formatted_time }}
+**To:** {{ to_addr }}
+{% if cc_addr %}**Cc:** {{ cc_addr }}{% endif %}
+
+{% if attachments %}
+## Attachments
+{% for attachment in attachments %}- [{{ display_names[attachment] }}](attachments/{{ url_encoded_attachments[attachment] }})
+{% endfor %}
+{% endif %}
+
+## Body
+
+{{ body }}
