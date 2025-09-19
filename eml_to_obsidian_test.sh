@@ -4,6 +4,10 @@
 # Traverses the Examples directory, runs eml_to_obsidian.sh on each .eml file,
 # and compares the output to approved outputs.
 
+# =============================================================================
+# CONSTANTS
+# =============================================================================
+
 # Base directories
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 EXAMPLES_DIR="$SCRIPT_DIR/Examples"
@@ -18,6 +22,10 @@ NC='\033[0m' # No Color
 
 # Log file
 LOG_FILE="/tmp/eml_to_obsidian_test.log"
+
+# Test configuration
+PREVIEW_LINES=10
+DIFF_FILE="/tmp/eml_diff.txt"
 echo "=== Starting eml_to_obsidian.sh Tests $(date) ===" > "$LOG_FILE"
 
 # Create output directories if they don't exist
@@ -131,7 +139,7 @@ compare_output() {
   fi
   
   # Compare markdown files
-  diff -u "$approved_file" "$test_file" > /tmp/eml_diff.txt
+  diff -u "$approved_file" "$test_file" > "$DIFF_FILE"
   local markdown_diff_result=$?
   
   # Compare attachments folders
@@ -142,13 +150,13 @@ compare_output() {
   # Check if attachments directories exist
   if [ -d "$test_attachments_dir" ] && [ -d "$approved_attachments_dir" ]; then
     # Compare attachments directories
-    diff -r "$approved_attachments_dir" "$test_attachments_dir" >> /tmp/eml_diff.txt 2>&1
+    diff -r "$approved_attachments_dir" "$test_attachments_dir" >> "$DIFF_FILE" 2>&1
     attachments_diff_result=$?
   elif [ -d "$test_attachments_dir" ] && [ ! -d "$approved_attachments_dir" ]; then
-    echo "Test has attachments but approved version doesn't" >> /tmp/eml_diff.txt
+    echo "Test has attachments but approved version doesn't" >> "$DIFF_FILE"
     attachments_diff_result=1
   elif [ ! -d "$test_attachments_dir" ] && [ -d "$approved_attachments_dir" ]; then
-    echo "Approved version has attachments but test doesn't" >> /tmp/eml_diff.txt
+    echo "Approved version has attachments but test doesn't" >> "$DIFF_FILE"
     attachments_diff_result=1
   fi
   
@@ -220,9 +228,9 @@ process_eml_file() {
       echo "Auto-approved new output: $approved_file" >> "$LOG_FILE"
       return 0
     elif [ "$INTERACTIVE" = true ]; then
-      echo "  New output (first 10 lines):"
-      head -n 10 "$test_file" | sed 's/^/  /'
-      if [ $(wc -l < "$test_file") -gt 10 ]; then
+      echo "  New output (first $PREVIEW_LINES lines):"
+      head -n "$PREVIEW_LINES" "$test_file" | sed 's/^/  /'
+      if [ $(wc -l < "$test_file") -gt "$PREVIEW_LINES" ]; then
         echo "  ... (truncated)"
       fi
       

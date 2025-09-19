@@ -34,17 +34,59 @@ from datetime import datetime
 import traceback
 
 # =============================================================================
+# CONSTANTS
+# =============================================================================
+
+# Date formats for email date parsing
+DATE_FORMATS = [
+    '%a, %d %b %Y %H:%M:%S %z',
+    '%a, %d %b %Y %H:%M:%S %Z',
+    '%d %b %Y %H:%M:%S %z',
+    '%a, %d %b %Y %H:%M:%S',
+    '%a, %d %b %Y %H:%M:%S.%f',
+    '%d %b %Y %H:%M:%S'
+]
+
+# Default charset fallbacks for content decoding
+DEFAULT_CHARSETS = ['utf-8', 'latin1']
+
+# Log file path
+LOG_FILE_PATH = "/tmp/email_to_md_debug.log"
+
+# Template file paths to search
+TEMPLATE_SEARCH_PATHS = [
+    'email_template.j2',  # Same directory as script
+    '/Users/jamesdelaney/CascadeProjects/playground/Apple Scripts/Mail/RuleScripts/EmailToRtf/email_template.j2'  # Legacy path
+]
+
+# =============================================================================
 # UTILITY FUNCTIONS
 # =============================================================================
 
 _filename_counter = {}
 
 def sanitize_filename(filename):
-    """Sanitize filename by replacing spaces with underscores"""
+    """
+    Sanitize filename by replacing spaces with underscores.
+    
+    Args:
+        filename (str): The original filename to sanitize
+        
+    Returns:
+        str: The sanitized filename with spaces replaced by underscores
+    """
     return filename.replace(' ', '_')
 
 def make_unique_filename(filename):
-    """Make filename unique by adding counter if needed"""
+    """
+    Make filename unique by adding counter if needed.
+    
+    Args:
+        filename (str): The original filename to make unique
+        
+    Returns:
+        str: A unique filename with counter suffix if needed
+    """
     base_name = filename.replace(' ', '_')
     if base_name not in _filename_counter:
         _filename_counter[base_name] = 0
@@ -54,8 +96,21 @@ def make_unique_filename(filename):
         name, ext = os.path.splitext(base_name)
         return f"{name}_{_filename_counter[base_name]}{ext}"
 
-def _safe_decode(payload, charset, fallback_charsets=['utf-8', 'latin1']):
-    """Safely decode payload with fallback charsets."""
+def _safe_decode(payload, charset, fallback_charsets=None):
+    """
+    Safely decode payload with fallback charsets.
+    
+    Args:
+        payload (bytes): The payload to decode
+        charset (str): The primary charset to try
+        fallback_charsets (list, optional): List of fallback charsets to try
+        
+    Returns:
+        str: The decoded string, using replacement characters for invalid bytes
+    """
+    if fallback_charsets is None:
+        fallback_charsets = DEFAULT_CHARSETS
+    
     for encoding in [charset] + fallback_charsets:
         try:
             return payload.decode(encoding, errors='replace')
@@ -81,16 +136,7 @@ def _extract_email_metadata(msg):
 
 def _parse_email_date(date_str):
     """Parse email date string and return formatted date/time."""
-    date_formats = [
-        '%a, %d %b %Y %H:%M:%S %z',
-        '%a, %d %b %Y %H:%M:%S %Z',
-        '%d %b %Y %H:%M:%S %z',
-        '%a, %d %b %Y %H:%M:%S',
-        '%a, %d %b %Y %H:%M:%S.%f',
-        '%d %b %Y %H:%M:%S'
-    ]
-    
-    for fmt in date_formats:
+    for fmt in DATE_FORMATS:
         try:
             parsed_date = datetime.strptime(date_str, fmt)
             return parsed_date.strftime('%Y-%m-%d'), parsed_date.strftime('%H:%M')
@@ -147,8 +193,16 @@ def _load_template(template_path):
                 with open(template_loc, 'r') as f:
                     return f.read()
     
-    # Use default template
-    logging.info("Using default template")
+    # Try default template locations
+    for template_loc in TEMPLATE_SEARCH_PATHS:
+        full_path = os.path.join(os.path.dirname(__file__), template_loc)
+        if os.path.exists(full_path):
+            logging.info(f"Using default template file: {full_path}")
+            with open(full_path, 'r') as f:
+                return f.read()
+    
+    # Use built-in default template
+    logging.info("Using built-in default template")
     return """---
 EmailSubject: "{{ subject }}"
 EmailTo: "{{ to_addr | replace('\n', ' ') }}"
@@ -188,22 +242,21 @@ tags: [email]
 
 def _setup_logging():
     """Setup logging configuration."""
-log_file = "/tmp/email_to_md_debug.log"
-log_level = logging.DEBUG if os.environ.get('DEBUG', '').lower() == 'true' else logging.INFO
+    log_level = logging.DEBUG if os.environ.get('DEBUG', '').lower() == 'true' else logging.INFO
     
-logging.basicConfig(
-    filename=log_file,
-    level=log_level,
-    format="%(asctime)s - %(levelname)s - %(message)s"
-)
-
-# Add console handler if DEBUG is enabled
-if os.environ.get('DEBUG', '').lower() == 'true':
-    console = logging.StreamHandler()
-    console.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(levelname)s: %(message)s')
-    console.setFormatter(formatter)
-    logging.getLogger('').addHandler(console)
+    logging.basicConfig(
+        filename=LOG_FILE_PATH,
+        level=log_level,
+        format="%(asctime)s - %(levelname)s - %(message)s"
+    )
+    
+    # Add console handler if DEBUG is enabled
+    if os.environ.get('DEBUG', '').lower() == 'true':
+        console = logging.StreamHandler()
+        console.setLevel(logging.DEBUG)
+        formatter = logging.Formatter('%(levelname)s: %(message)s')
+        console.setFormatter(formatter)
+        logging.getLogger('').addHandler(console)
 
 # Setup logging
 _setup_logging()
