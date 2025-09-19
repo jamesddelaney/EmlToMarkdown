@@ -1,6 +1,9 @@
 # Testing output directory - temporary files created during testing
 OutputTesting/
 
+# Obsidian files
+.obsidian/
+
 # Python cache files
 __pycache__/
 *.pyc
