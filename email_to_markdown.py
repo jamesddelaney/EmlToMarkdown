@@ -36,9 +36,9 @@ import traceback
 # Filename sanitization functions
 _filename_counter = {}
 
-def sanitize_filename(filename):
+    def sanitize_filename(filename):
     """Sanitize filename by replacing spaces with underscores"""
-    return filename.replace(' ', '_')
+        return filename.replace(' ', '_')
 
 def make_unique_filename(filename):
     """Make filename unique by adding counter if needed"""
@@ -60,6 +60,65 @@ def _safe_decode(payload, charset, fallback_charsets=['utf-8', 'latin1']):
             continue
     # Final fallback
     return payload.decode('latin1', errors='replace')
+
+def _extract_email_metadata(msg):
+    """Extract basic email metadata from message object."""
+    return {
+        'subject': decode_email_header(msg.get('Subject', '')),
+        'from_addr': decode_email_header(msg.get('From', '')),
+        'to_addr': decode_email_header(msg.get('To', '')),
+        'cc_addr': decode_email_header(msg.get('Cc', '')),
+        'date_str': msg.get('Date', ''),
+        'message_id': msg.get('Message-ID', '').strip('<>')
+    }
+
+def _parse_email_date(date_str):
+    """Parse email date string and return formatted date/time."""
+    date_formats = [
+        '%a, %d %b %Y %H:%M:%S %z',
+        '%a, %d %b %Y %H:%M:%S %Z',
+        '%d %b %Y %H:%M:%S %z',
+        '%a, %d %b %Y %H:%M:%S',
+        '%a, %d %b %Y %H:%M:%S.%f',
+        '%d %b %Y %H:%M:%S'
+    ]
+    
+    for fmt in date_formats:
+        try:
+            parsed_date = datetime.strptime(date_str, fmt)
+            return parsed_date.strftime('%Y-%m-%d'), parsed_date.strftime('%H:%M')
+        except ValueError:
+            continue
+    
+    # Fallback to current date/time
+    now = datetime.now()
+    logging.warning(f"Could not parse date: {date_str}, using current time")
+    return now.strftime('%Y-%m-%d'), now.strftime('%H:%M')
+
+def _process_email_content(msg, cid_map):
+    """Process email content and return body text."""
+    html_content = extract_html_content(msg)
+    text_content = extract_plain_text(msg)
+    
+    # Convert HTML to markdown if available, otherwise use plain text
+    if html_content:
+        logging.info("Converting HTML content to Markdown")
+        body = html_to_markdown(html_content)
+    elif text_content:
+        logging.info("Using plain text content")
+        body = text_content
+    else:
+        logging.warning("No content found in email")
+        body = "No content found in this email."
+    
+    # Replace CID references with file paths
+    if cid_map:
+        logging.info("Replacing CID references with file paths")
+        for cid_ref, file_path in cid_map.items():
+            logging.info(f"Replacing {cid_ref} with {file_path}")
+            body = body.replace(cid_ref, file_path)
+    
+    return body
 
 def _load_template(template_path):
     """Load template from file or return default template."""
@@ -112,9 +171,11 @@ tags: [email]
 {{ body }}
 """
 
-# Setup logging
+def _setup_logging():
+    """Setup logging configuration."""
 log_file = "/tmp/email_to_md_debug.log"
 log_level = logging.DEBUG if os.environ.get('DEBUG', '').lower() == 'true' else logging.INFO
+    
 logging.basicConfig(
     filename=log_file,
     level=log_level,
@@ -128,6 +189,9 @@ if os.environ.get('DEBUG', '').lower() == 'true':
     formatter = logging.Formatter('%(levelname)s: %(message)s')
     console.setFormatter(formatter)
     logging.getLogger('').addHandler(console)
+
+# Setup logging
+_setup_logging()
 
 def decode_email_header(header_value):
     """Decode email header properly handling encoded-words."""
@@ -316,10 +380,10 @@ def extract_attachments(msg, attachment_dir=None):
         return sanitized_attachments, cid_map, {}
     
     # Process all email parts
-    for part in msg.walk():
+        for part in msg.walk():
         attachment_info = _process_email_part(part, saved_files)
         if not attachment_info:
-            continue
+                continue
             
         # Save the attachment
         if _save_attachment(attachment_info, attachment_dir, saved_files):
@@ -384,21 +448,9 @@ def convert_email_to_markdown(email_source, template_path=None):
         parser = Parser()
         msg = parser.parsestr(email_source)
         
-        # Extract email components
-        subject = decode_email_header(msg.get('Subject', ''))
-        from_addr = decode_email_header(msg.get('From', ''))
-        to_addr = decode_email_header(msg.get('To', ''))
-        cc_addr = decode_email_header(msg.get('Cc', ''))
-        date_str = msg.get('Date', '')
-        message_id = msg.get('Message-ID', '')
-        if message_id:
-            message_id = message_id.strip('<>')
-        
-        logging.info(f"Processing email: {subject}")
-        
-        # Extract content (prefer HTML for better link preservation)
-        html_content = extract_html_content(msg)
-        text_content = extract_plain_text(msg)
+        # Extract email metadata
+        metadata = _extract_email_metadata(msg)
+        logging.info(f"Processing email: {metadata['subject']}")
         
         # Create attachments directory if output dir is specified
         attachment_dir = None
@@ -414,134 +466,29 @@ def convert_email_to_markdown(email_source, template_path=None):
         if cid_map:
             logging.info(f"Found {len(cid_map)} embedded images with Content-ID")
             
-        # Convert HTML to markdown if available, otherwise use plain text
-        if html_content:
-            logging.info("Converting HTML content to Markdown")
-            body = html_to_markdown(html_content)
-        elif text_content:
-            logging.info("Using plain text content")
-            body = text_content
-        else:
-            logging.warning("No content found in email")
-            body = "No content found in this email."
-            
-        # Replace CID references with file paths
-        if cid_map:
-            logging.info("Replacing CID references with file paths")
-            for cid_ref, file_path in cid_map.items():
-                logging.info(f"Replacing {cid_ref} with {file_path}")
-                body = body.replace(cid_ref, file_path)
+        # Process email content
+        body = _process_email_content(msg, cid_map)
         
-
-        
-        # Format date for YAML front matter
-        try:
-            # Try to parse the date in various formats
-            date_formats = [
-                '%a, %d %b %Y %H:%M:%S %z',
-                '%a, %d %b %Y %H:%M:%S %Z',
-                '%d %b %Y %H:%M:%S %z',
-                '%a, %d %b %Y %H:%M:%S',
-                '%a, %d %b %Y %H:%M:%S.%f',
-                '%d %b %Y %H:%M:%S'
-            ]
-            
-            parsed_date = None
-            for fmt in date_formats:
-                try:
-                    parsed_date = datetime.strptime(date_str, fmt)
-                    break
-                except ValueError:
-                    continue
-            
-            if parsed_date:
-                formatted_date = parsed_date.strftime('%Y-%m-%d')
-                formatted_time = parsed_date.strftime('%H:%M')
-            else:
-                # Fallback to current date/time
-                now = datetime.now()
-                formatted_date = now.strftime('%Y-%m-%d')
-                formatted_time = now.strftime('%H:%M')
-                logging.warning(f"Could not parse date: {date_str}, using current time")
-        except Exception as e:
-            # Fallback to current date/time on any error
-            now = datetime.now()
-            formatted_date = now.strftime('%Y-%m-%d')
-            formatted_time = now.strftime('%H:%M')
-            logging.warning(f"Error parsing date: {e}, using current time")
+        # Parse date
+        formatted_date, formatted_time = _parse_email_date(metadata['date_str'])
         
         # Create message URL
-        message_url = f"message://%3c{message_id}%3e" if message_id else ""
+        message_url = f"message://%3c{metadata['message_id']}%3e" if metadata['message_id'] else ""
         
-        # Look for template file in several locations
-        template_locations = [
-            template_path,  # User-provided path
-            os.environ.get('TEMPLATE_PATH'),  # From environment variable
-            os.path.join(os.path.dirname(os.path.abspath(__file__)), 'email_template.j2'),  # Same directory as script
-            '/Users/jamesdelaney/CascadeProjects/playground/Apple Scripts/Mail/RuleScripts/EmailToRtf/email_template.j2'  # Hardcoded path
-        ]
-        
-        template_string = None
-        for template_loc in template_locations:
-            if template_loc and os.path.exists(template_loc):
-                logging.info(f"Using template file: {template_loc}")
-                with open(template_loc, 'r') as f:
-                    template_string = f.read()
-                break
-        
-        # Use default template if no file found
-        if not template_string:
-            logging.info("Using default template")
-            template_string = """---
-EmailSubject: '{{ subject }}'
-EmailTo: '{{ to_addr }}'
-{% if cc_addr %}EmailCc: '{{ cc_addr }}'{% endif %}
-EmailFrom: '{{ from_addr }}'
-EmailSentDate: {{ formatted_date }} {{ formatted_time }}
-{% if eml_file %}emlFile: '{{ eml_file }}'{% endif %}
-{% if attachments %}
-attachments:
-{% for attachment in attachments %}  - attachments/{{ attachment }}
-{% endfor %}
-{% endif %}
-tags: [email]
----
-
-# {{ subject }}
-
-[Open in Mail]({{ message_url }})
-
-**From:** {{ from_addr }}
-**Date:** {{ formatted_date }} {{ formatted_time }}
-**To:** {{ to_addr }}
-{% if cc_addr %}**Cc:** {{ cc_addr }}{% endif %}
-
-{% if attachments %}
-## Attachments
-{% for attachment in attachments %}- [{{ attachment }}](attachments/{{ attachment }})
-{% endfor %}
-{% endif %}
-
-## Content
-
-{{ body }}
-"""
-    
-        # Simple attachment processing - no complex logic needed
+        # Load template
+        template_string = _load_template(template_path)
             
         # Normalize whitespace in body content
-        # Replace multiple consecutive blank lines with a single blank line
         body = re.sub(r'\n\s*\n\s*\n', '\n\n', body)
-        # Remove trailing whitespace on lines
         body = re.sub(r' +\n', '\n', body)
             
         # Create and render template
         template = Template(template_string)
         markdown = template.render(
-            subject=subject,
-            from_addr=from_addr,
-            to_addr=to_addr,
-            cc_addr=cc_addr,
+            subject=metadata['subject'],
+            from_addr=metadata['from_addr'],
+            to_addr=metadata['to_addr'],
+            cc_addr=metadata['cc_addr'],
             formatted_date=formatted_date,
             formatted_time=formatted_time,
             message_url=message_url,
