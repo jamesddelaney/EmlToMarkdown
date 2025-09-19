@@ -27,44 +27,90 @@ from email.parser import Parser
 from email.header import decode_header
 import html2text
 from bs4 import BeautifulSoup
-from jinja2 import Template, FileSystemLoader, Environment
-import json
+from jinja2 import Template
 import re
 import logging
 from datetime import datetime
 import traceback
 
-# Import the sanitize_filenames module
-try:
-    from sanitize_filenames import sanitize_filename, process_attachments
-    logging.info("Successfully imported sanitize_filenames module")
-except ImportError:
-    logging.error("Failed to import sanitize_filenames module, using fallback methods")
-    # Define fallback functions if the module is not available
-    def sanitize_filename(filename):
-        """Fallback sanitize function"""
-        return filename.replace(' ', '_')
-    
-    # Global counter for handling duplicate filenames
-    _filename_counter = {}
-    
-    def make_unique_filename(filename):
-        """Make filename unique by adding counter if needed"""
-        base_name = filename.replace(' ', '_')
-        if base_name not in _filename_counter:
-            _filename_counter[base_name] = 0
-            return base_name
-        else:
-            _filename_counter[base_name] += 1
-            name, ext = os.path.splitext(base_name)
-            return f"{name}_{_filename_counter[base_name]}{ext}"
+# Filename sanitization functions
+_filename_counter = {}
+
+def sanitize_filename(filename):
+    """Sanitize filename by replacing spaces with underscores"""
+    return filename.replace(' ', '_')
+
+def make_unique_filename(filename):
+    """Make filename unique by adding counter if needed"""
+    base_name = filename.replace(' ', '_')
+    if base_name not in _filename_counter:
+        _filename_counter[base_name] = 0
+        return base_name
+    else:
+        _filename_counter[base_name] += 1
+        name, ext = os.path.splitext(base_name)
+        return f"{name}_{_filename_counter[base_name]}{ext}"
+
+def _safe_decode(payload, charset, fallback_charsets=['utf-8', 'latin1']):
+    """Safely decode payload with fallback charsets."""
+    for encoding in [charset] + fallback_charsets:
+        try:
+            return payload.decode(encoding, errors='replace')
+        except (UnicodeDecodeError, LookupError):
+            continue
+    # Final fallback
+    return payload.decode('latin1', errors='replace')
+
+def _load_template(template_path):
+    """Load template from file or return default template."""
+    if template_path:
+        # Try to load custom template
+        possible_paths = [
+            template_path,
+            os.path.join(os.path.dirname(__file__), template_path),
+            os.path.join(os.path.expanduser('~'), template_path)
+        ]
         
-    def process_attachments(attachments, attachment_dir=None):
-        """Fallback process_attachments function"""
-        original_to_sanitized = {a: sanitize_filename(a) for a in attachments}
-        sanitized_to_display = {s: o for o, s in original_to_sanitized.items()}
-        sanitized_to_url = {s: s.replace(' ', '%20') for s in original_to_sanitized.values()}
-        return original_to_sanitized, sanitized_to_display, sanitized_to_url
+        for template_loc in possible_paths:
+            if template_loc and os.path.exists(template_loc):
+                logging.info(f"Using template file: {template_loc}")
+                with open(template_loc, 'r') as f:
+                    return f.read()
+    
+    # Use default template
+    logging.info("Using default template")
+    return """---
+EmailSubject: "{{ subject }}"
+EmailTo: "{{ to_addr | replace('\n', ' ') }}"
+{% if cc_addr %}EmailCc: "{{ cc_addr | replace('\n', ' ') }}"{% endif %}
+EmailFrom: "{{ from_addr | replace('\n', ' ') }}"
+EmailSentDate: "{{ formatted_date }} {{ formatted_time }}"
+{% if eml_file %}emlFile: "{{ eml_file }}"{% endif %}
+{% if attachments %}
+attachments:
+{% for attachment in attachments %}  - "attachments/{{ attachment | replace('\n', '') }}"
+{% endfor %}
+{% endif %}
+tags: [email]
+---
+## Headers
+
+**Subject:** {{ subject }}
+**From:** {{ from_addr }}
+**Date:** {{ formatted_date }} {{ formatted_time }}
+**To:** {{ to_addr }}
+{% if cc_addr %}**Cc:** {{ cc_addr }}{% endif %}
+
+{% if attachments %}
+## Attachments
+{% for attachment in attachments %}- [{{ attachment }}](attachments/{{ attachment | replace('(', '%28') | replace(')', '%29') }})
+{% endfor %}
+{% endif %}
+
+## Body
+
+{{ body }}
+"""
 
 # Setup logging
 log_file = "/tmp/email_to_md_debug.log"
@@ -113,42 +159,17 @@ def decode_email_header(header_value):
 
 def extract_html_content(msg):
     """Extract HTML content from email message."""
-    html_content = None
-    
-    # First try to find HTML part
     if msg.is_multipart():
         for part in msg.walk():
-            content_type = part.get_content_type()
-            if content_type == 'text/html':
+            if part.get_content_type() == 'text/html':
                 charset = part.get_content_charset() or 'utf-8'
-                try:
-                    html_content = part.get_payload(decode=True).decode(charset, errors='replace')
-                    break
-                except:
-                    logging.warning("Failed to decode HTML with charset %s, trying utf-8", charset)
-                    try:
-                        html_content = part.get_payload(decode=True).decode('utf-8', errors='replace')
-                        break
-                    except:
-                        logging.warning("Failed with utf-8 too, falling back to latin1")
-                        html_content = part.get_payload(decode=True).decode('latin1', errors='replace')
-                        break
+                return _safe_decode(part.get_payload(decode=True), charset)
     else:
-        # Single part message
-        content_type = msg.get_content_type()
-        if content_type == 'text/html':
+        if msg.get_content_type() == 'text/html':
             charset = msg.get_content_charset() or 'utf-8'
-            try:
-                html_content = msg.get_payload(decode=True).decode(charset, errors='replace')
-            except:
-                logging.warning("Failed to decode HTML with charset %s, trying utf-8", charset)
-                try:
-                    html_content = msg.get_payload(decode=True).decode('utf-8', errors='replace')
-                except:
-                    logging.warning("Failed with utf-8 too, falling back to latin1")
-                    html_content = msg.get_payload(decode=True).decode('latin1', errors='replace')
+            return _safe_decode(msg.get_payload(decode=True), charset)
     
-    return html_content
+    return None
 
 def extract_plain_text(msg):
     """Extract plain text content from email message."""
@@ -187,6 +208,95 @@ def extract_plain_text(msg):
     
     return text_content
 
+def _process_email_part(part, saved_files):
+    """Process a single email part and return attachment info or None."""
+    if part.get_content_maintype() == 'multipart':
+        return None
+        
+    payload = part.get_payload(decode=True)
+    if not payload:
+        return None
+        
+    # Generate a hash of the payload to identify duplicates
+    import hashlib
+    content_hash = hashlib.md5(payload).hexdigest()
+    
+    # Check if it's a regular attachment first (prioritize real filenames)
+    filename = part.get_filename()
+    if filename:
+        filename = decode_email_header(filename)
+        # Clean up filename by removing newlines and extra whitespace
+        filename = filename.replace('\n', '').replace('\r', '').strip()
+        # Sanitize the filename
+        sanitized_filename = sanitize_filename(filename)
+        
+        attachment_info = {
+            'type': 'regular',
+            'original_filename': filename,
+            'sanitized_filename': sanitized_filename,
+            'payload': payload,
+            'content_hash': content_hash
+        }
+        
+        # Check if this regular attachment also has a Content-ID (for inline images)
+        content_id = part.get('Content-ID')
+        if content_id:
+            cid = content_id.strip('<>')
+            attachment_info['cid'] = cid
+            
+        logging.info(f"Found regular attachment: {filename} -> {sanitized_filename}")
+        return attachment_info
+    else:
+        # Only process as embedded image if there's no regular filename
+        content_id = part.get('Content-ID')
+        if content_id:
+            cid = content_id.strip('<>')
+            content_type = part.get_content_type()
+            extension = content_type.split('/')[1] if '/' in content_type else 'bin'
+            embedded_filename = f"embedded_image_{cid}.{extension}"
+            
+            # Sanitize the embedded filename and make it unique
+            sanitized_embedded = make_unique_filename(embedded_filename)
+            
+            attachment_info = {
+                'type': 'embedded',
+                'cid': cid,
+                'original_filename': embedded_filename,
+                'sanitized_filename': sanitized_embedded,
+                'payload': payload,
+                'content_hash': content_hash,
+                'content_type': content_type
+            }
+            
+            logging.info(f"Found embedded image with Content-ID: {cid}")
+            logging.info(f"Created filename for embedded image: {embedded_filename} -> {sanitized_embedded}")
+            return attachment_info
+    
+    return None
+
+def _save_attachment(attachment_info, attachment_dir, saved_files):
+    """Save an attachment to disk and return success status."""
+    if not attachment_dir:
+        return True  # Not saving to disk, but still include in list
+        
+    filepath = os.path.join(attachment_dir, attachment_info['sanitized_filename'])
+    content_hash = attachment_info['content_hash']
+    
+    # Check if we've already saved a file with this content
+    if content_hash in saved_files:
+        logging.info(f"File with same content already saved: {saved_files[content_hash]}")
+        return True
+    
+    try:
+        with open(filepath, 'wb') as f:
+            f.write(attachment_info['payload'])
+        logging.info(f"Saved attachment to: {filepath}")
+        saved_files[content_hash] = attachment_info['sanitized_filename']
+        return True
+    except Exception as e:
+        logging.error(f"Failed to save attachment: {e}")
+        return False
+
 def extract_attachments(msg, attachment_dir=None):
     """Extract information about attachments and embedded images with Content-ID.
     
@@ -197,143 +307,36 @@ def extract_attachments(msg, attachment_dir=None):
     Returns:
         tuple: (list of attachment filenames, dict mapping CID references to file paths)
     """
-    original_attachments = []  # Original filenames from the email
-    sanitized_attachments = []  # Sanitized filenames that are actually saved
-    cid_map = {}  # Maps CID references to file paths
-    saved_files = {}  # Dictionary to track saved files by content hash
-    embedded_images = []  # Store embedded images for processing after regular attachments
+    original_attachments = []
+    sanitized_attachments = []
+    cid_map = {}
+    saved_files = {}
     
-    # First pass: collect all parts and separate embedded images from regular attachments
-    regular_attachments = []
+    if not msg.is_multipart():
+        return sanitized_attachments, cid_map, {}
     
-    if msg.is_multipart():
-        for part in msg.walk():
-            if part.get_content_maintype() == 'multipart':
-                continue
-                
-            payload = part.get_payload(decode=True)
-            if not payload:
-                continue
-                
-            # Generate a hash of the payload to identify duplicates
-            import hashlib
-            content_hash = hashlib.md5(payload).hexdigest()
+    # Process all email parts
+    for part in msg.walk():
+        attachment_info = _process_email_part(part, saved_files)
+        if not attachment_info:
+            continue
             
-            # Check if it's a regular attachment first (prioritize real filenames)
-            filename = part.get_filename()
-            if filename:
-                filename = decode_email_header(filename)
-                # Clean up filename by removing newlines and extra whitespace
-                filename = filename.replace('\n', '').replace('\r', '').strip()
-                # Sanitize the filename
-                sanitized_filename = sanitize_filename(filename)
-                
-                regular_attachments.append({
-                    'original_filename': filename,
-                    'sanitized_filename': sanitized_filename,
-                    'payload': payload,
-                    'content_hash': content_hash
-                })
-                logging.info(f"Found regular attachment: {filename} -> {sanitized_filename}")
-                
-                # Check if this regular attachment also has a Content-ID (for inline images)
-                content_id = part.get('Content-ID')
-                if content_id:
-                    cid = content_id.strip('<>')
-                    cid_map[f"cid:{cid}"] = f"attachments/{sanitized_filename}"
-                    logging.info(f"Added CID mapping: cid:{cid} -> attachments/{sanitized_filename}")
-            else:
-                # Only process as embedded image if there's no regular filename
-                content_id = part.get('Content-ID')
-                if content_id:
-                    # Store for later processing
-                    cid = content_id.strip('<>')
-                    content_type = part.get_content_type()
-                    extension = content_type.split('/')[1] if '/' in content_type else 'bin'
-                    embedded_filename = f"embedded_image_{cid}.{extension}"
-                    
-                    # Sanitize the embedded filename and make it unique
-                    sanitized_embedded = make_unique_filename(embedded_filename)
-                    
-                    embedded_images.append({
-                        'cid': cid,
-                        'original_filename': embedded_filename,
-                        'sanitized_filename': sanitized_embedded,
-                        'payload': payload,
-                        'content_hash': content_hash,
-                        'content_type': content_type
-                    })
-                    logging.info(f"Found embedded image with Content-ID: {cid}")
-                    logging.info(f"Created filename for embedded image: {embedded_filename} -> {sanitized_embedded}")
+        # Save the attachment
+        if _save_attachment(attachment_info, attachment_dir, saved_files):
+            original_attachments.append(attachment_info['original_filename'])
+            sanitized_attachments.append(attachment_info['sanitized_filename'])
+            
+            # Add to CID map if it has a Content-ID
+            if 'cid' in attachment_info:
+                cid_map[f"cid:{attachment_info['cid']}"] = f"attachments/{attachment_info['sanitized_filename']}"
     
-    # Process regular attachments first (they have meaningful filenames)
-    for attachment in regular_attachments:
-        original_filename = attachment['original_filename']
-        sanitized_filename = attachment['sanitized_filename']
-        payload = attachment['payload']
-        content_hash = attachment['content_hash']
-        
-        # Save the file if directory is provided
-        if attachment_dir:
-            filepath = os.path.join(attachment_dir, sanitized_filename)
-            try:
-                with open(filepath, 'wb') as f:
-                    f.write(payload)
-                logging.info(f"Saved attachment to: {filepath}")
-                saved_files[content_hash] = sanitized_filename
-                # Only add to attachments list if it was successfully saved
-                original_attachments.append(original_filename)
-                sanitized_attachments.append(sanitized_filename)
-            except Exception as e:
-                logging.error(f"Failed to save attachment: {e}")
-        else:
-            # If we're not saving to disk, still include in the list
-            original_attachments.append(original_filename)
-            sanitized_attachments.append(sanitized_filename)
-    
-    # Now process embedded images, using existing files if content matches
-    for img in embedded_images:
-        cid = img['cid']
-        original_embedded = img['original_filename']
-        sanitized_embedded = img['sanitized_filename']
-        payload = img['payload']
-        content_hash = img['content_hash']
-        
-        # For embedded images, always save them with unique filenames
-        # even if they have the same content as regular attachments
-        # This ensures that CID references work correctly
-        logging.info(f"Saving embedded image: {sanitized_embedded}")
-        
-        # Save the file if directory is provided
-        if attachment_dir:
-            filepath = os.path.join(attachment_dir, sanitized_embedded)
-            try:
-                with open(filepath, 'wb') as f:
-                    f.write(payload)
-                logging.info(f"Saved embedded image to: {filepath}")
-                saved_files[content_hash] = sanitized_embedded
-                # Only add to attachments list if it was successfully saved
-                original_attachments.append(original_embedded)
-                sanitized_attachments.append(sanitized_embedded)
-            except Exception as e:
-                logging.error(f"Failed to save embedded image: {e}")
-        else:
-            # If we're not saving to disk, still include in the list
-            original_attachments.append(original_embedded)
-            sanitized_attachments.append(sanitized_embedded)
-        
-        # Add to CID map
-        cid_map[f"cid:{cid}"] = f"attachments/{sanitized_embedded}"
-    
-    # Count unique attachments that were actually saved
-    actual_attachment_count = len(set(sanitized_attachments))
-    logging.info(f"Found {actual_attachment_count} unique attachments")
-    logging.info(f"Found {len(cid_map)} embedded images with Content-ID")
-    
-    # Create a mapping from original to sanitized filenames
+    # Create filename mapping
     filename_map = {}
     for i in range(len(original_attachments)):
         filename_map[original_attachments[i]] = sanitized_attachments[i]
+    
+    logging.info(f"Found {len(set(sanitized_attachments))} unique attachments")
+    logging.info(f"Found {len(cid_map)} embedded images with Content-ID")
     
     return sanitized_attachments, cid_map, filename_map
 
