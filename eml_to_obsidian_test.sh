@@ -191,17 +191,11 @@ process_eml_file() {
     return 1
   fi
   
-  # Get the approved output path (handle flat structure)
-  if [ "$dir_name" = "." ]; then
-    # Files are directly in Examples/, so put them directly in OutputApproved/
-    local approved_file="$APPROVED_DIR/$(basename "$test_file")"
-  else
-    # Files are in subfolders, maintain the structure
-    local approved_dir="$APPROVED_DIR/$dir_name"
-    mkdir -p "$approved_dir"
-    local test_base_name=$(basename "$test_file")
-    local approved_file="$approved_dir/$test_base_name"
-  fi
+  # Get the approved output path - match the test file structure
+  # The test file is in OutputTesting/📧 2025-03-14 Email Name/📧 2025-03-14 Email Name.md
+  # So the approved file should be in OutputApproved/📧 2025-03-14 Email Name/📧 2025-03-14 Email Name.md
+  local test_relative_path=${test_file#$TEST_DIR/}
+  local approved_file="$APPROVED_DIR/$test_relative_path"
   
   # Compare with approved output
   compare_output "$test_file" "$approved_file"
