@@ -1,10 +1,10 @@
 ---
-EmailSubject: '{{ subject }}'
-EmailTo: '{{ to_addr | replace('\n', ' ') }}'
-{% if cc_addr %}EmailCc: '{{ cc_addr | replace('\n', ' ') }}'{% endif %}
-EmailFrom: '{{ from_addr | replace('\n', ' ') }}'
-EmailSentDate: {{ formatted_date }} {{ formatted_time }}
-{% if eml_file %}emlFile: '{{ eml_file }}'{% endif %}
+EmailSubject: "{{ subject }}"
+EmailTo: "{{ to_addr | replace('\n', ' ') }}"
+{% if cc_addr %}EmailCc: "{{ cc_addr | replace('\n', ' ') }}"{% endif %}
+EmailFrom: "{{ from_addr | replace('\n', ' ') }}"
+EmailSentDate: "{{ formatted_date }} {{ formatted_time }}"
+{% if eml_file %}emlFile: "{{ eml_file }}"{% endif %}
 {% if attachments %}
 attachments:
 {% for attachment in attachments %}  - "attachments/{{ attachment | replace('\n', '') }}"

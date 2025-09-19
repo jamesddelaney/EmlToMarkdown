@@ -29,10 +29,19 @@ AUTO_APPROVE=false
 SHOW_DIFF=false
 CLEAN=false
 
+# Make variables global so they can be accessed in functions
+export INTERACTIVE
+export AUTO_APPROVE
+export SHOW_DIFF
+
+# Debug: Print arguments
+echo "DEBUG: Arguments received: $@" >> "$LOG_FILE"
+
 while [[ $# -gt 0 ]]; do
   case $1 in
     --interactive)
       INTERACTIVE=true
+      echo "DEBUG: INTERACTIVE set to true" >> "$LOG_FILE"
       shift
       ;;
     --auto-approve)
@@ -90,7 +99,7 @@ run_eml_to_obsidian() {
   
   # Run the script with SKIP_OBSIDIAN to prevent opening Obsidian during testing
   echo "Running eml_to_obsidian.sh on $eml_file..." >> "$LOG_FILE"
-  SKIP_OBSIDIAN=true "$SCRIPT_DIR/eml_to_obsidian.sh" "$eml_file" "$output_dir/$dir_name" >> "$LOG_FILE" 2>&1
+  SKIP_OBSIDIAN=true "$SCRIPT_DIR/eml_to_obsidian.sh" "$eml_file" "$output_dir" >> "$LOG_FILE" 2>&1
   
   # Check if the script ran successfully
   if [ $? -ne 0 ]; then
@@ -99,7 +108,7 @@ run_eml_to_obsidian() {
   fi
   
   # Find the generated markdown file (should be the most recent .md file)
-  local md_file=$(find "$output_dir/$dir_name" -name "*.md" -type f -print0 | xargs -0 ls -t | head -1)
+  local md_file=$(find "$output_dir" -name "*.md" -type f -print0 | xargs -0 ls -t | head -1)
   
   if [ -z "$md_file" ]; then
     echo "No markdown file generated for $eml_file" >> "$LOG_FILE"
@@ -121,13 +130,39 @@ compare_output() {
     return 2 # No approved output
   fi
   
-  # Compare files
+  # Compare markdown files
   diff -u "$approved_file" "$test_file" > /tmp/eml_diff.txt
-  if [ $? -eq 0 ]; then
-    echo "Output matches approved version" >> "$LOG_FILE"
+  local markdown_diff_result=$?
+  
+  # Compare attachments folders
+  local test_attachments_dir="$(dirname "$test_file")/attachments"
+  local approved_attachments_dir="$(dirname "$approved_file")/attachments"
+  local attachments_diff_result=0
+  
+  # Check if attachments directories exist
+  if [ -d "$test_attachments_dir" ] && [ -d "$approved_attachments_dir" ]; then
+    # Compare attachments directories
+    diff -r "$approved_attachments_dir" "$test_attachments_dir" >> /tmp/eml_diff.txt 2>&1
+    attachments_diff_result=$?
+  elif [ -d "$test_attachments_dir" ] && [ ! -d "$approved_attachments_dir" ]; then
+    echo "Test has attachments but approved version doesn't" >> /tmp/eml_diff.txt
+    attachments_diff_result=1
+  elif [ ! -d "$test_attachments_dir" ] && [ -d "$approved_attachments_dir" ]; then
+    echo "Approved version has attachments but test doesn't" >> /tmp/eml_diff.txt
+    attachments_diff_result=1
+  fi
+  
+  # Return 0 only if both markdown and attachments match
+  if [ $markdown_diff_result -eq 0 ] && [ $attachments_diff_result -eq 0 ]; then
+    echo "Output and attachments match approved version" >> "$LOG_FILE"
     return 0 # Match
   else
-    echo "Output differs from approved version" >> "$LOG_FILE"
+    if [ $markdown_diff_result -ne 0 ]; then
+      echo "Markdown differs from approved version" >> "$LOG_FILE"
+    fi
+    if [ $attachments_diff_result -ne 0 ]; then
+      echo "Attachments differ from approved version" >> "$LOG_FILE"
+    fi
     return 1 # Difference
   fi
 }
@@ -150,19 +185,23 @@ process_eml_file() {
   fi
   
   # Find the generated markdown file
-  local test_file=$(find "$TEST_DIR/$dir_name" -name "*.md" -type f -print0 | xargs -0 ls -t | head -1)
+  local test_file=$(find "$TEST_DIR" -name "*.md" -type f -print0 | xargs -0 ls -t | head -1)
   if [ -z "$test_file" ]; then
     echo -e "${RED}  No markdown file found in test output${NC}"
     return 1
   fi
   
-  # Get the approved output path
-  local approved_dir="$APPROVED_DIR/$dir_name"
-  mkdir -p "$approved_dir"
-  
-  # Get the base name of the test file (with date)
-  local test_base_name=$(basename "$test_file")
-  local approved_file="$approved_dir/$test_base_name"
+  # Get the approved output path (handle flat structure)
+  if [ "$dir_name" = "." ]; then
+    # Files are directly in Examples/, so put them directly in OutputApproved/
+    local approved_file="$APPROVED_DIR/$(basename "$test_file")"
+  else
+    # Files are in subfolders, maintain the structure
+    local approved_dir="$APPROVED_DIR/$dir_name"
+    mkdir -p "$approved_dir"
+    local test_base_name=$(basename "$test_file")
+    local approved_file="$approved_dir/$test_base_name"
+  fi
   
   # Compare with approved output
   compare_output "$test_file" "$approved_file"
@@ -220,7 +259,10 @@ process_eml_file() {
       echo "Auto-approved changed output: $approved_file" >> "$LOG_FILE"
       return 0
     elif [ "$INTERACTIVE" = true ]; then
+      echo "DEBUG: Entering interactive mode for changed output" >> "$LOG_FILE"
+      echo "DEBUG: About to read input" >> "$LOG_FILE"
       read -p "  Accept this new output? (y/n): " choice
+      echo "DEBUG: Read input: '$choice'" >> "$LOG_FILE"
       if [[ $choice =~ ^[Yy]$ ]]; then
         cp "$test_file" "$approved_file"
         echo -e "${GREEN}  New output approved and saved.${NC}"
@@ -232,6 +274,7 @@ process_eml_file() {
         return 1
       fi
     else
+      echo "DEBUG: Hitting else clause - INTERACTIVE=$INTERACTIVE, AUTO_APPROVE=$AUTO_APPROVE" >> "$LOG_FILE"
       echo "  Run with --interactive to approve changes or --auto-approve to automatically approve all changes."
       return 1
     fi
@@ -239,8 +282,11 @@ process_eml_file() {
 }
 
 # Find all .eml files
-EML_FILES=$(find "$EXAMPLES_DIR" -name "*.eml" -type f | sort)
-EML_COUNT=$(echo "$EML_FILES" | grep -c ".eml")
+EML_FILES=()
+while IFS= read -r file; do
+    EML_FILES+=("$file")
+done < <(find "$EXAMPLES_DIR" -name "*.eml" -type f | sort)
+EML_COUNT=${#EML_FILES[@]}
 
 # Debug info
 echo "Found the following .eml files:" >> "$LOG_FILE"
@@ -256,7 +302,7 @@ echo "Found $EML_COUNT .eml files to process" >> "$LOG_FILE"
 
 # Process each file
 SUCCESS_COUNT=0
-while IFS= read -r eml_file; do
+for eml_file in "${EML_FILES[@]}"; do
   if [ -f "$eml_file" ]; then
     if process_eml_file "$eml_file"; then
       SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
@@ -265,7 +311,7 @@ while IFS= read -r eml_file; do
     echo -e "${RED}  File not found: $eml_file${NC}"
     echo "File not found: $eml_file" >> "$LOG_FILE"
   fi
-done <<< "$EML_FILES"
+done
 
 # Print summary
 echo -e "\n${YELLOW}Summary: $SUCCESS_COUNT/$EML_COUNT files processed successfully${NC}"

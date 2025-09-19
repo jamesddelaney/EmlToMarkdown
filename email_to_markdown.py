@@ -44,6 +44,20 @@ except ImportError:
     def sanitize_filename(filename):
         """Fallback sanitize function"""
         return filename.replace(' ', '_')
+    
+    # Global counter for handling duplicate filenames
+    _filename_counter = {}
+    
+    def make_unique_filename(filename):
+        """Make filename unique by adding counter if needed"""
+        base_name = filename.replace(' ', '_')
+        if base_name not in _filename_counter:
+            _filename_counter[base_name] = 0
+            return base_name
+        else:
+            _filename_counter[base_name] += 1
+            name, ext = os.path.splitext(base_name)
+            return f"{name}_{_filename_counter[base_name]}{ext}"
         
     def process_attachments(attachments, attachment_dir=None):
         """Fallback process_attachments function"""
@@ -214,8 +228,8 @@ def extract_attachments(msg, attachment_dir=None):
                 extension = content_type.split('/')[1] if '/' in content_type else 'bin'
                 embedded_filename = f"embedded_image_{cid}.{extension}"
                 
-                # Sanitize the embedded filename
-                sanitized_embedded = sanitize_filename(embedded_filename)
+                # Sanitize the embedded filename and make it unique
+                sanitized_embedded = make_unique_filename(embedded_filename)
                 
                 embedded_images.append({
                     'cid': cid,
@@ -276,14 +290,10 @@ def extract_attachments(msg, attachment_dir=None):
         payload = img['payload']
         content_hash = img['content_hash']
         
-        # Check if we've already saved this content with a different name
-        if content_hash in saved_files:
-            existing_filename = saved_files[content_hash]
-            logging.info(f"Detected duplicate content: {sanitized_embedded} is the same as {existing_filename}")
-            # Map the CID to the existing file instead of saving a duplicate
-            cid_map[f"cid:{cid}"] = f"attachments/{existing_filename}"
-            # Don't add the embedded image to the attachments list since it's a duplicate
-            continue
+        # For embedded images, always save them with unique filenames
+        # even if they have the same content as regular attachments
+        # This ensures that CID references work correctly
+        logging.info(f"Saving embedded image: {sanitized_embedded}")
         
         # Save the file if directory is provided
         if attachment_dir:

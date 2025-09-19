@@ -83,10 +83,10 @@ Example output:
 
 ```markdown
 ---
-EmailSubject: 'Meeting Follow-up'
-EmailTo: 'team@company.com'
-EmailFrom: 'john@company.com'
-EmailSentDate: 2025-01-15 14:30
+EmailSubject: "Meeting Follow-up"
+EmailTo: "team@company.com"
+EmailFrom: "john@company.com"
+EmailSentDate: "2025-01-15 14:30"
 attachments:
   - "attachments/presentation.pdf"
   - "attachments/notes.docx"
@@ -177,15 +177,28 @@ Run the comprehensive test suite:
 
 # Run regression tests comparing against approved outputs
 ./eml_to_obsidian_test.sh
+# Processes all .eml files in Examples/, outputs to OutputTesting and compares outputs to OutputApproved/ baselines.
+# Fails the test if any outputs differ from the approved versions.
 
 # Interactive mode - approve/reject new outputs
 ./eml_to_obsidian_test.sh --interactive
+# Prompts you to accept or reject each new or changed output file.
+# Shows a preview of the first 10 lines before asking for your decision.
 
 # Auto-approve all changes (use with caution)
 ./eml_to_obsidian_test.sh --auto-approve
+# Automatically accepts all new outputs and overwrites approved baselines.
+# Useful for bulk updates but bypasses manual review of changes.
 
 # Show differences when outputs don't match
 ./eml_to_obsidian_test.sh --show-diff
+# Displays unified diff output when test results differ from approved versions.
+# Helps identify exactly what changed between the current and expected outputs.
+
+# Clean test directory before running tests
+./eml_to_obsidian_test.sh --clean
+# Removes all files from OutputTesting/ directory and starts fresh.
+# Useful when you want to ensure no artifacts from previous test runs.
 ```
 
 #### Test Categories
