@@ -46,12 +46,7 @@ EmailToMarkdown/
 ├── email_template.j2            # Jinja2 template for output formatting
 ├── test_email_conversion.sh     # Automated testing script
 ├── eml_to_obsidian_test.sh      # Regression testing script
-├── Examples/                    # Test email files organized by type
-│   ├── embedded_images/         # Emails with inline images (Content-ID)
-│   ├── regular_attachment_pdf/  # Emails with file attachments
-│   ├── funky_characters/        # Emails with special characters
-│   ├── mixed_content/           # Emails with both images and attachments
-│   └── plain_text/              # Plain text emails
+├── Examples/                    # Test email files (.eml format)
 ├── OutputApproved/              # Approved baseline outputs for testing
 ├── OutputTesting/               # Temporary directory for test output
 └── README.md                    # This file
@@ -164,7 +159,7 @@ Test the conversion with sample emails from the Examples directory:
 
 ```bash
 # Test with a sample EML file
-./eml_to_obsidian.sh Examples/embedded_images/One\ Bedroom\ Backyard\ Proposal.eml /tmp/test-output/
+./eml_to_obsidian.sh "Examples/One Bedroom Backyard Proposal.eml" /tmp/test-output/
 ```
 
 #### Automated Testing
@@ -201,15 +196,17 @@ Run the comprehensive test suite:
 # Useful when you want to ensure no artifacts from previous test runs.
 ```
 
-#### Test Categories
+#### Test Examples
 
-The `Examples/` directory contains test emails organized by type:
+The `Examples/` directory contains various test emails covering different scenarios:
 
-- **`embedded_images/`** - Emails with inline images using Content-ID references
-- **`regular_attachment_pdf/`** - Emails with standard file attachments
-- **`funky_characters/`** - Emails with special characters in subjects/filenames
-- **`mixed_content/`** - Emails with both embedded images and regular attachments
-- **`plain_text/`** - Plain text emails without HTML or attachments
+- **Copilot Implementation Launch Call | CounselFi** - Email with PDF attachment
+- **One Bedroom Backyard Proposal** - Email with PDF attachment and embedded images
+- **Proposal for Planning and Permitting Services** - Email with PDF attachment
+- **Re_ dawn's user not in hs** - Email with embedded images and special characters
+- **Reclaim Your Time With AI - Workshop Follow Up** - Email with PDF attachment
+- **Rippling Implementation_ CounselFi - Introduction to Support** - Email with embedded images
+- **Your Samara XL8 Proposal** - Email with multiple attachments and embedded images
 
 #### Test Results
 
@@ -226,7 +223,7 @@ The `Examples/` directory contains test emails organized by type:
 - **`email_template.j2`**: Jinja2 template defining the Markdown output structure
 - **`test_email_conversion.sh`**: Automated testing script that validates conversion across different email types
 - **`eml_to_obsidian_test.sh`**: Regression testing script that compares outputs against approved baselines
-- **`Examples/`**: Comprehensive test suite with real email samples organized by complexity
+- **`Examples/`**: Comprehensive test suite with real email samples covering various scenarios
 - **`OutputApproved/`**: Baseline outputs for regression testing and quality assurance
 
 ### Contributing
