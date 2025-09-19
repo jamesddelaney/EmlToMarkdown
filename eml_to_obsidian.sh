@@ -36,51 +36,10 @@ echo "Filename: $FILENAME" >> "$LOG_FILE"
 # Log the output directory
 echo "Output directory: $OUTPUT_DIR" >> "$LOG_FILE"
 
-# Extract date from email file
-echo "Extracting date from email..." >> "$LOG_FILE"
-EMAIL_DATE=$(grep -i "^Date:" "$EML_FILE" | head -1 | sed 's/^Date:\s*//')
-echo "Email date string: $EMAIL_DATE" >> "$LOG_FILE"
-
-# Convert email date to YYYY-MM-DD format
-if [ -n "$EMAIL_DATE" ]; then
-    # Try various date formats
-    formats=(
-        "%a, %d %b %Y %H:%M:%S %z"
-        "%d %b %Y %H:%M:%S %z"
-        "%a, %d %b %Y %H:%M:%S"
-        "%a, %d %b %Y %H:%M:%S %Z"
-    )
-    
-    # For debugging
-    echo "Trying to parse date: $EMAIL_DATE" >> "$LOG_FILE"
-    
-    # Try each format
-    for format in "${formats[@]}"; do
-        FORMATTED_DATE=$(date -j -f "$format" "$EMAIL_DATE" "+%Y-%m-%d" 2>/dev/null)
-        if [ -n "$FORMATTED_DATE" ]; then
-            echo "Successfully parsed date using format: $format" >> "$LOG_FILE"
-            break
-        fi
-    done
-    
-    # If all formats fail, try extracting just the date part and parsing that
-    if [ -z "$FORMATTED_DATE" ]; then
-        # Extract just the date portion (assuming format like "Fri, 14 Mar 2025")
-        DATE_PART=$(echo "$EMAIL_DATE" | grep -o -E "[0-9]{1,2}\s+[A-Za-z]{3}\s+[0-9]{4}")
-        if [ -n "$DATE_PART" ]; then
-            echo "Extracted date part: $DATE_PART" >> "$LOG_FILE"
-            FORMATTED_DATE=$(date -j -f "%d %b %Y" "$DATE_PART" "+%Y-%m-%d" 2>/dev/null)
-        fi
-    fi
-    
-    echo "Formatted date: $FORMATTED_DATE" >> "$LOG_FILE"
-fi
-
-# If we couldn't parse the date, use today's date
-if [ -z "$FORMATTED_DATE" ]; then
-    FORMATTED_DATE=$(date "+%Y-%m-%d")
-    echo "Using today's date: $FORMATTED_DATE" >> "$LOG_FILE"
-fi
+# Date parsing is now handled by the Python script
+# Use current date as fallback for folder naming
+FORMATTED_DATE=$(date "+%Y-%m-%d")
+echo "Using current date for folder naming: $FORMATTED_DATE" >> "$LOG_FILE"
 
 # Create folder for this email (with emoji and date prefix)
 EMAIL_FOLDER="${OUTPUT_DIR}📧 ${FORMATTED_DATE} ${FILENAME}"

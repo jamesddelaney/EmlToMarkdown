@@ -33,12 +33,15 @@ import logging
 from datetime import datetime
 import traceback
 
-# Filename sanitization functions
+# =============================================================================
+# UTILITY FUNCTIONS
+# =============================================================================
+
 _filename_counter = {}
 
-    def sanitize_filename(filename):
+def sanitize_filename(filename):
     """Sanitize filename by replacing spaces with underscores"""
-        return filename.replace(' ', '_')
+    return filename.replace(' ', '_')
 
 def make_unique_filename(filename):
     """Make filename unique by adding counter if needed"""
@@ -60,6 +63,10 @@ def _safe_decode(payload, charset, fallback_charsets=['utf-8', 'latin1']):
             continue
     # Final fallback
     return payload.decode('latin1', errors='replace')
+
+# =============================================================================
+# EMAIL PROCESSING FUNCTIONS
+# =============================================================================
 
 def _extract_email_metadata(msg):
     """Extract basic email metadata from message object."""
@@ -120,6 +127,10 @@ def _process_email_content(msg, cid_map):
     
     return body
 
+# =============================================================================
+# TEMPLATE FUNCTIONS
+# =============================================================================
+
 def _load_template(template_path):
     """Load template from file or return default template."""
     if template_path:
@@ -171,6 +182,10 @@ tags: [email]
 {{ body }}
 """
 
+# =============================================================================
+# CONFIGURATION FUNCTIONS
+# =============================================================================
+
 def _setup_logging():
     """Setup logging configuration."""
 log_file = "/tmp/email_to_md_debug.log"
@@ -192,6 +207,10 @@ if os.environ.get('DEBUG', '').lower() == 'true':
 
 # Setup logging
 _setup_logging()
+
+# =============================================================================
+# EMAIL PARSING FUNCTIONS
+# =============================================================================
 
 def decode_email_header(header_value):
     """Decode email header properly handling encoded-words."""
@@ -439,6 +458,10 @@ def html_to_markdown(html_content):
         logging.error(f"Error converting HTML to Markdown: {e}")
         return html_content  # Return original content if conversion fails
 
+# =============================================================================
+# MAIN CONVERSION FUNCTIONS
+# =============================================================================
+
 def convert_email_to_markdown(email_source, template_path=None):
     """Convert email source to markdown with template."""
     logging.info("Starting email conversion")
@@ -505,6 +528,10 @@ def convert_email_to_markdown(email_source, template_path=None):
         logging.error(traceback.format_exc())
         # Return a basic markdown with error information
         return f"---\nError: Unable to convert email\n---\n\n## Error Details\n\n{str(e)}\n\nPlease check the log file for more details."
+
+# =============================================================================
+# COMMAND LINE INTERFACE
+# =============================================================================
 
 def main():
     """Main function to handle command line usage"""
