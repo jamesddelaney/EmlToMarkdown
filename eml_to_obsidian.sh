@@ -36,10 +36,29 @@ echo "Filename: $FILENAME" >> "$LOG_FILE"
 # Log the output directory
 echo "Output directory: $OUTPUT_DIR" >> "$LOG_FILE"
 
-# Date parsing is now handled by the Python script
-# Use current date as fallback for folder naming
-FORMATTED_DATE=$(date "+%Y-%m-%d")
-echo "Using current date for folder naming: $FORMATTED_DATE" >> "$LOG_FILE"
+# Extract date from email file for folder naming
+echo "Extracting date from email..." >> "$LOG_FILE"
+EMAIL_DATE=$(grep -i "^Date:" "$EML_FILE" | head -1 | sed 's/^Date:\s*//')
+echo "Email date string: $EMAIL_DATE" >> "$LOG_FILE"
+
+# Convert email date to YYYY-MM-DD format for folder naming
+FORMATTED_DATE=$(date "+%Y-%m-%d")  # Default to current date
+if [ -n "$EMAIL_DATE" ]; then
+    # Extract just the date part (day month year) from the email date
+    DATE_PART=$(echo "$EMAIL_DATE" | sed 's/.*\([0-9][0-9]* [A-Za-z][a-z][a-z] [0-9][0-9][0-9][0-9]\).*/\1/')
+    echo "Trying to parse date: $EMAIL_DATE" >> "$LOG_FILE"
+    echo "Extracted date part: $DATE_PART" >> "$LOG_FILE"
+    
+    if [ -n "$DATE_PART" ]; then
+        PARSED_DATE=$(date -j -f "%d %b %Y" "$DATE_PART" "+%Y-%m-%d" 2>/dev/null)
+        if [ -n "$PARSED_DATE" ]; then
+            FORMATTED_DATE="$PARSED_DATE"
+            echo "Formatted date: $FORMATTED_DATE" >> "$LOG_FILE"
+        fi
+    fi
+fi
+
+echo "Using date for folder naming: $FORMATTED_DATE" >> "$LOG_FILE"
 
 # Create folder for this email (with emoji and date prefix)
 EMAIL_FOLDER="${OUTPUT_DIR}📧 ${FORMATTED_DATE} ${FILENAME}"

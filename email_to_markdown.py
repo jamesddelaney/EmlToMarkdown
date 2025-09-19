@@ -452,10 +452,10 @@ def extract_attachments(msg, attachment_dir=None):
         return sanitized_attachments, cid_map, {}
     
     # Process all email parts
-        for part in msg.walk():
+    for part in msg.walk():
         attachment_info = _process_email_part(part, saved_files)
         if not attachment_info:
-                continue
+            continue
             
         # Save the attachment
         if _save_attachment(attachment_info, attachment_dir, saved_files):
