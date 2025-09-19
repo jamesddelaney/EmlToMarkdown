@@ -219,33 +219,12 @@ def extract_attachments(msg, attachment_dir=None):
             import hashlib
             content_hash = hashlib.md5(payload).hexdigest()
             
-            # Check if it's an embedded image with Content-ID
-            content_id = part.get('Content-ID')
-            if content_id:
-                # Store for later processing
-                cid = content_id.strip('<>')
-                content_type = part.get_content_type()
-                extension = content_type.split('/')[1] if '/' in content_type else 'bin'
-                embedded_filename = f"embedded_image_{cid}.{extension}"
-                
-                # Sanitize the embedded filename and make it unique
-                sanitized_embedded = make_unique_filename(embedded_filename)
-                
-                embedded_images.append({
-                    'cid': cid,
-                    'original_filename': embedded_filename,
-                    'sanitized_filename': sanitized_embedded,
-                    'payload': payload,
-                    'content_hash': content_hash,
-                    'content_type': content_type
-                })
-                logging.info(f"Found embedded image with Content-ID: {cid}")
-                logging.info(f"Created filename for embedded image: {embedded_filename} -> {sanitized_embedded}")
-            
-            # Check if it's a regular attachment
+            # Check if it's a regular attachment first (prioritize real filenames)
             filename = part.get_filename()
             if filename:
                 filename = decode_email_header(filename)
+                # Clean up filename by removing newlines and extra whitespace
+                filename = filename.replace('\n', '').replace('\r', '').strip()
                 # Sanitize the filename
                 sanitized_filename = sanitize_filename(filename)
                 
@@ -256,6 +235,36 @@ def extract_attachments(msg, attachment_dir=None):
                     'content_hash': content_hash
                 })
                 logging.info(f"Found regular attachment: {filename} -> {sanitized_filename}")
+                
+                # Check if this regular attachment also has a Content-ID (for inline images)
+                content_id = part.get('Content-ID')
+                if content_id:
+                    cid = content_id.strip('<>')
+                    cid_map[f"cid:{cid}"] = f"attachments/{sanitized_filename}"
+                    logging.info(f"Added CID mapping: cid:{cid} -> attachments/{sanitized_filename}")
+            else:
+                # Only process as embedded image if there's no regular filename
+                content_id = part.get('Content-ID')
+                if content_id:
+                    # Store for later processing
+                    cid = content_id.strip('<>')
+                    content_type = part.get_content_type()
+                    extension = content_type.split('/')[1] if '/' in content_type else 'bin'
+                    embedded_filename = f"embedded_image_{cid}.{extension}"
+                    
+                    # Sanitize the embedded filename and make it unique
+                    sanitized_embedded = make_unique_filename(embedded_filename)
+                    
+                    embedded_images.append({
+                        'cid': cid,
+                        'original_filename': embedded_filename,
+                        'sanitized_filename': sanitized_embedded,
+                        'payload': payload,
+                        'content_hash': content_hash,
+                        'content_type': content_type
+                    })
+                    logging.info(f"Found embedded image with Content-ID: {cid}")
+                    logging.info(f"Created filename for embedded image: {embedded_filename} -> {sanitized_embedded}")
     
     # Process regular attachments first (they have meaningful filenames)
     for attachment in regular_attachments:
@@ -515,24 +524,7 @@ tags: [email]
 {{ body }}
 """
     
-        # Process attachments for display in the template
-        # The attachments list already contains sanitized filenames
-        # We just need to create display names for them
-        display_names = {}
-        
-        for attachment in attachments:
-            # Create a shortened display name for long filenames
-            # This helps prevent line breaks in the markdown output
-            name, ext = os.path.splitext(attachment)
-            if len(name) > 40:  # Truncate long names
-                display_name = name[:37] + "..." + ext
-            else:
-                display_name = attachment
-                
-            display_names[attachment] = display_name
-            
-        # Use original filenames for links (Obsidian handles special characters fine)
-        url_encoded_attachments = {attachment: attachment for attachment in attachments}
+        # Simple attachment processing - no complex logic needed
             
         # Normalize whitespace in body content
         # Replace multiple consecutive blank lines with a single blank line
@@ -553,8 +545,6 @@ tags: [email]
             eml_file=os.environ.get('EML_FILENAME', ''),
             attachments=attachments,
             filename_map=filename_map,
-            url_encoded_attachments=url_encoded_attachments,
-            display_names=display_names,
             body=body
         )
         

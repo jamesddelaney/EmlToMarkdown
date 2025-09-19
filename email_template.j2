@@ -22,7 +22,7 @@ tags: [email]
 
 {% if attachments %}
 ## Attachments
-{% for attachment in attachments %}- [{{ display_names[attachment] }}](attachments/{{ url_encoded_attachments[attachment] }})
+{% for attachment in attachments %}- [{{ attachment }}](attachments/{{ attachment | replace('(', '%28') | replace(')', '%29') }})
 {% endfor %}
 {% endif %}
 

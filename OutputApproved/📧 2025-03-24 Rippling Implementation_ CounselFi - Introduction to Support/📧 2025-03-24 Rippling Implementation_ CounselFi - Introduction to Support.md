@@ -8,7 +8,6 @@ emlFile: "Rippling Implementation_ CounselFi - Introduction to Support.eml"
 
 attachments:
   - "attachments/image.png"
-  - "attachments/embedded_image_ii_m73jm66e0.png"
 
 
 tags: [email]
@@ -24,7 +23,6 @@ tags: [email]
 
 ## Attachments
 - [image.png](attachments/image.png)
-- [embedded_image_ii_m73jm66e0.png](attachments/embedded_image_ii_m73jm66e0.png)
 
 
 
@@ -36,7 +34,7 @@ I'm excited to let you know that at this time, you have completed implementation
 
 Here’s how to get in touch with Rippling Support:
 
-![image.png](attachments/embedded_image_ii_m73jm66e0.png)
+![image.png](attachments/image.png)
 
 To access support, you can reach out using this [link](<https://app.rippling.com/help?q_mailing_7TUvzhdFxJeQo9QbskUkwM2GSjQG1DQufGkZA=RoogEjnPRYLFrDSMN1wLqewVCeESyZ8RKvBnWZRLnYtbngD3tSSCxvS1a>). You can find this button at the top of your Rippling navigation where it says “Support”. From this page, you can access:
 

@@ -209,6 +209,14 @@ process_eml_file() {
       echo -e "${GREEN}  Auto-approving new output.${NC}"
       mkdir -p "$(dirname "$approved_file")"
       cp "$test_file" "$approved_file"
+      # Copy attachments directory if it exists
+      local test_attachments_dir="$(dirname "$test_file")/attachments"
+      local approved_attachments_dir="$(dirname "$approved_file")/attachments"
+      if [ -d "$test_attachments_dir" ]; then
+        rm -rf "$approved_attachments_dir"
+        cp -r "$test_attachments_dir" "$approved_attachments_dir"
+        echo "Auto-approved attachments: $approved_attachments_dir" >> "$LOG_FILE"
+      fi
       echo "Auto-approved new output: $approved_file" >> "$LOG_FILE"
       return 0
     elif [ "$INTERACTIVE" = true ]; then
@@ -250,6 +258,14 @@ process_eml_file() {
     if [ "$AUTO_APPROVE" = true ]; then
       echo -e "${GREEN}  Auto-approving new output.${NC}"
       cp "$test_file" "$approved_file"
+      # Copy attachments directory if it exists
+      local test_attachments_dir="$(dirname "$test_file")/attachments"
+      local approved_attachments_dir="$(dirname "$approved_file")/attachments"
+      if [ -d "$test_attachments_dir" ]; then
+        rm -rf "$approved_attachments_dir"
+        cp -r "$test_attachments_dir" "$approved_attachments_dir"
+        echo "Auto-approved attachments: $approved_attachments_dir" >> "$LOG_FILE"
+      fi
       echo "Auto-approved changed output: $approved_file" >> "$LOG_FILE"
       return 0
     elif [ "$INTERACTIVE" = true ]; then

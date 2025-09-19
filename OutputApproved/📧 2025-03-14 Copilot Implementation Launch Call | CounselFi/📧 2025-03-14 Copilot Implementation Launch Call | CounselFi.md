@@ -8,7 +8,6 @@ emlFile: "Copilot Implementation Launch Call | CounselFi.eml"
 
 attachments:
   - "attachments/CounselFi_&_ZoomInfo___Copilot_Launch_with_Hubspot.pdf"
-  - "attachments/embedded_image_f_m87w2y1v0.pdf"
 
 
 tags: [email]
@@ -23,8 +22,7 @@ tags: [email]
 
 
 ## Attachments
-- [CounselFi_&_ZoomInfo___Copilot_Launch....pdf](attachments/CounselFi_&_ZoomInfo___Copilot_Launch_with_Hubspot.pdf)
-- [embedded_image_f_m87w2y1v0.pdf](attachments/embedded_image_f_m87w2y1v0.pdf)
+- [CounselFi_&_ZoomInfo___Copilot_Launch_with_Hubspot.pdf](attachments/CounselFi_&_ZoomInfo___Copilot_Launch_with_Hubspot.pdf)
 
 
 

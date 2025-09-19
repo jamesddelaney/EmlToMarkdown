@@ -13,12 +13,6 @@ attachments:
   - "attachments/Dog_ear_garden_gate.jpg"
   - "attachments/Rolling_access_gate_on_roller_wheel.webp"
   - "attachments/canibuild-map-1743562499794.png"
-  - "attachments/embedded_image_f_m8zc5h021.png"
-  - "attachments/embedded_image_f_m8zc5lev2.pdf"
-  - "attachments/embedded_image_f_m8zc9lxb3.pdf"
-  - "attachments/embedded_image_f_m8zcbsba5.jpeg"
-  - "attachments/embedded_image_f_m8zcbpad4.webp"
-  - "attachments/embedded_image_f_m8zcdrqi5.png"
 
 
 tags: [email]
@@ -34,19 +28,11 @@ tags: [email]
 
 ## Attachments
 - [Tree_removal_close-up.png](attachments/Tree_removal_close-up.png)
-- [00000900_Proposal_-_Backyard_XL8_-_Er....pdf](attachments/00000900_Proposal_-_Backyard_XL8_-_Erica_&_James_Delaney_-_251_Toro
-_Canyon_Rd,_Carpinteria_CA_93013_-_20250401.pdf)
-- [Meeting_summary_for_Erica_&_James_Sam....pdf](attachments/Meeting_summary_for_Erica_&_James_Samara_Proposal_Review
-_(04_01_2025).pdf)
+- [00000900_Proposal_-_Backyard_XL8_-_Erica_&_James_Delaney_-_251_Toro_Canyon_Rd,_Carpinteria_CA_93013_-_20250401.pdf](attachments/00000900_Proposal_-_Backyard_XL8_-_Erica_&_James_Delaney_-_251_Toro_Canyon_Rd,_Carpinteria_CA_93013_-_20250401.pdf)
+- [Meeting_summary_for_Erica_&_James_Samara_Proposal_Review_(04_01_2025).pdf](attachments/Meeting_summary_for_Erica_&_James_Samara_Proposal_Review_%2804_01_2025%29.pdf)
 - [Dog_ear_garden_gate.jpg](attachments/Dog_ear_garden_gate.jpg)
 - [Rolling_access_gate_on_roller_wheel.webp](attachments/Rolling_access_gate_on_roller_wheel.webp)
 - [canibuild-map-1743562499794.png](attachments/canibuild-map-1743562499794.png)
-- [embedded_image_f_m8zc5h021.png](attachments/embedded_image_f_m8zc5h021.png)
-- [embedded_image_f_m8zc5lev2.pdf](attachments/embedded_image_f_m8zc5lev2.pdf)
-- [embedded_image_f_m8zc9lxb3.pdf](attachments/embedded_image_f_m8zc9lxb3.pdf)
-- [embedded_image_f_m8zcbsba5.jpeg](attachments/embedded_image_f_m8zcbsba5.jpeg)
-- [embedded_image_f_m8zcbpad4.webp](attachments/embedded_image_f_m8zcbpad4.webp)
-- [embedded_image_f_m8zcdrqi5.png](attachments/embedded_image_f_m8zcdrqi5.png)
 
 
 
