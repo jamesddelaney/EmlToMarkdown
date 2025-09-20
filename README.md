@@ -46,6 +46,7 @@ EmailToMarkdown/
 ├── email_template.j2            # Jinja2 template for output formatting
 ├── test_email_conversion.sh     # Automated testing script
 ├── eml_to_obsidian_test.sh      # Regression testing script
+├── pre-commit.template          # Pre-commit hook template for development
 ├── Examples/                    # Test email files (.eml format)
 ├── OutputApproved/              # Approved baseline outputs for testing
 ├── OutputTesting/               # Temporary directory for test output
@@ -238,6 +239,24 @@ The `Examples/` directory contains various test emails covering different scenar
    ```
 5. Test with various email formats using the Examples directory
 6. Submit a pull request
+
+### Pre-commit Hook
+
+The repository includes a pre-commit hook that automatically runs tests before allowing commits:
+
+```bash
+# Set up the pre-commit hook (run once after cloning)
+cp pre-commit.template .git/hooks/pre-commit
+chmod +x .git/hooks/pre-commit
+```
+
+The pre-commit hook will:
+- 🧪 Run automated tests (`test_email_conversion.sh`)
+- 🔄 Run regression tests (`eml_to_obsidian_test.sh`)
+- ✅ Allow the commit only if all tests pass
+- ❌ Block the commit if any tests fail
+
+This ensures that broken code never gets committed to the repository.
 
 ### Development Workflow
 

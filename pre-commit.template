@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Pre-commit hook for EmlToMarkdown
+# Copy this file to .git/hooks/pre-commit and make it executable
+# chmod +x .git/hooks/pre-commit
+
+# Runs the test suite before allowing commits
+
+set -e  # Exit on any error
+
+echo "🔍 Running pre-commit tests..."
+
+# Change to the repository root directory
+cd "$(git rev-parse --show-toplevel)"
+
+# Check if test scripts exist
+if [ ! -f "./eml_to_obsidian_test.sh" ]; then
+    echo "❌ Test script not found: ./eml_to_obsidian_test.sh"
+    exit 1
+fi
+
+if [ ! -f "./test_email_conversion.sh" ]; then
+    echo "❌ Test script not found: ./test_email_conversion.sh"
+    exit 1
+fi
+
+# Run the automated test suite first
+echo "🧪 Running automated tests..."
+if ! ./test_email_conversion.sh; then
+    echo "❌ Automated tests failed!"
+    echo "Please fix the failing tests before committing."
+    exit 1
+fi
+
+# Run the regression test suite
+echo "🔄 Running regression tests..."
+if ! ./eml_to_obsidian_test.sh; then
+    echo "❌ Regression tests failed!"
+    echo "Please fix the failing tests before committing."
+    echo "Run './eml_to_obsidian_test.sh --show-diff' to see what changed."
+    exit 1
+fi
+
+echo "✅ All tests passed! Proceeding with commit."
+exit 0
