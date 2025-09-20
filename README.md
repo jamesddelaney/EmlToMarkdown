@@ -115,6 +115,7 @@ The tool supports several environment variables for customization:
 - `DEBUG=true`: Enable verbose logging
 - `OUTPUT_DIR=/path/to/output`: Set default output directory
 - `TEMPLATE_PATH=/path/to/template.j2`: Use custom template
+- `SKIP_OBSIDIAN=true`: Skip opening Obsidian (useful for testing)
 
 ### Custom Templates
 
@@ -290,7 +291,96 @@ Production/
     └── version_info.txt
 ```
 
-### Development Workflow
+### Deployment Usage
+
+Once the post-commit hook is set up, you can use the deployed files:
+
+```bash
+# Use the latest production version
+./Production/eml_to_obsidian.sh /path/to/email.eml
+
+# Use the latest version via symlink
+./Production/latest/eml_to_obsidian.sh /path/to/email.eml
+
+# Use a specific version (for rollback)
+./Production/20250919_180744_5872ee1/eml_to_obsidian.sh /path/to/email.eml
+
+# Check version information
+cat Production/latest/version_info.txt
+```
+
+## Deployment
+
+### Automated Deployment
+
+The repository includes automated deployment via git hooks that create production-ready versions of the tool.
+
+### Setup Deployment Hooks
+
+```bash
+# Set up both hooks (run once after cloning)
+cp pre-commit.template .git/hooks/pre-commit
+cp post-commit.template .git/hooks/post-commit
+chmod +x .git/hooks/pre-commit .git/hooks/post-commit
+```
+
+### Production Files
+
+After each commit, production files are automatically deployed to:
+
+- **`Production/`** - Root directory with latest files
+- **`Production/latest/`** - Symlink to the most recent version
+- **`Production/YYYYMMDD_HHMMSS_commithash/`** - Versioned folders for rollback
+
+### Using Production Files
+
+```bash
+# Use latest version
+./Production/eml_to_obsidian.sh /path/to/email.eml
+
+# Use specific version (for rollback)
+./Production/20250919_180744_5872ee1/eml_to_obsidian.sh /path/to/email.eml
+
+# Check version info
+cat Production/latest/version_info.txt
+```
+
+### System-wide Installation
+
+For system-wide access, you can install from the Production directory:
+
+```bash
+# Install to system (requires sudo)
+sudo cp Production/eml_to_obsidian.sh /usr/local/bin/eml-to-markdown
+sudo cp Production/email_to_markdown.py /usr/local/bin/
+sudo cp Production/email_template.j2 /usr/local/share/eml-to-markdown/
+
+# Use from anywhere
+eml-to-markdown /path/to/email.eml
+```
+
+### Home Directory Installation
+
+For personal use without sudo:
+
+```bash
+# Create bin directory
+mkdir -p ~/bin
+
+# Copy production files
+cp Production/eml_to_obsidian.sh ~/bin/eml-to-markdown
+cp Production/email_to_markdown.py ~/bin/
+cp Production/email_template.j2 ~/bin/
+
+# Add to PATH (add to ~/.bashrc or ~/.zshrc)
+echo 'export PATH="$HOME/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+
+# Use from anywhere
+eml-to-markdown /path/to/email.eml
+```
+
+## Development
 
 When making changes to the conversion logic:
 
@@ -309,6 +399,3 @@ For issues and questions:
 1. Check the debug logs first
 2. Review the troubleshooting section
 3. Open an issue on GitHub with sample email and log files
-# Test change
-# Another test change
-# Test post-commit hook
