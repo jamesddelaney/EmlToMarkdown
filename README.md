@@ -2,6 +2,47 @@
 
 A powerful command-line tool that converts EML (email) files to well-structured Markdown format, designed for integration with note-taking systems like Obsidian. The tool preserves hyperlinks, extracts attachments, handles embedded images, and organizes emails with proper metadata.
 
+## 🚨 Quick Troubleshooting for Future Self
+
+**When adding a new EML file and conversion isn't working:**
+
+### 1. **Quick Test**
+```bash
+# Test the new email
+DEBUG=true ./eml_to_obsidian.sh "Examples/Your_New_Email.eml"
+
+# Check the debug log
+tail -20 /tmp/email_to_md_debug.log
+```
+
+### 2. **Common Issues**
+- **Date parsing**: Check if email date is being extracted correctly
+- **Attachments**: Look for "Found X attachments" vs "Found X embedded images" in logs
+- **Special characters**: Check if filename has spaces/special chars (use quotes)
+
+### 3. **Add to Test Suite**
+```bash
+# Run tests to make sure nothing broke
+./eml_to_obsidian_test.sh
+
+# If new email needs approval
+./eml_to_obsidian_test.sh --interactive
+```
+
+### 4. **Remember the Hooks**
+- **Pre-commit hook**: Runs tests before allowing commits (blocks if tests fail)
+- **Post-commit hook**: Auto-deploys to `Production/` folder with versioning
+- **Setup**: `cp pre-commit.template .git/hooks/pre-commit && cp post-commit.template .git/hooks/post-commit && chmod +x .git/hooks/*`
+
+### 5. **Commit Process**
+```bash
+git add Examples/Your_New_Email.eml
+git commit -m "Add new email example"
+# Pre-commit runs tests, post-commit deploys to Production/
+```
+
+---
+
 ## Features
 
 - **📧 Email Conversion**: Converts EML files to clean Markdown with YAML front matter
