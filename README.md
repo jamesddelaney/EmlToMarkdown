@@ -258,3 +258,4 @@ For issues and questions:
 1. Check the debug logs first
 2. Review the troubleshooting section
 3. Open an issue on GitHub with sample email and log files
+# Test change
