@@ -1,0 +1,72 @@
+#!/bin/bash
+
+# Post-commit hook for EmlToMarkdown
+# Copy this file to .git/hooks/post-commit and make it executable
+# chmod +x .git/hooks/post-commit
+
+# Automatically deploys production files to versioned folders
+
+set -e  # Exit on any error
+
+echo "🚀 Deploying to production..."
+
+# Change to the repository root directory
+cd "$(git rev-parse --show-toplevel)"
+
+# Create Production directory if it doesn't exist
+PRODUCTION_DIR="Production"
+mkdir -p "$PRODUCTION_DIR"
+
+# Get the current commit hash (short version)
+COMMIT_HASH=$(git rev-parse --short HEAD)
+
+# Get the current timestamp for versioning
+TIMESTAMP=$(date "+%Y%m%d_%H%M%S")
+
+# Create version folder name (timestamp + commit hash)
+VERSION_FOLDER="${TIMESTAMP}_${COMMIT_HASH}"
+
+# Create the version directory
+VERSION_DIR="$PRODUCTION_DIR/$VERSION_FOLDER"
+mkdir -p "$VERSION_DIR"
+
+# Copy the three main files to Production root
+echo "📁 Copying files to Production root..."
+cp eml_to_obsidian.sh "$PRODUCTION_DIR/"
+cp email_to_markdown.py "$PRODUCTION_DIR/"
+cp email_template.j2 "$PRODUCTION_DIR/"
+
+# Copy the three main files to version folder
+echo "📁 Copying files to version folder: $VERSION_FOLDER"
+cp eml_to_obsidian.sh "$VERSION_DIR/"
+cp email_to_markdown.py "$VERSION_DIR/"
+cp email_template.j2 "$VERSION_DIR/"
+
+# Create a version info file
+VERSION_INFO="$VERSION_DIR/version_info.txt"
+cat > "$VERSION_INFO" << EOF
+Version: $VERSION_FOLDER
+Commit Hash: $(git rev-parse HEAD)
+Commit Date: $(git log -1 --format=%ci)
+Commit Message: $(git log -1 --format=%s)
+Deployed: $(date)
+EOF
+
+# Make the scripts executable in both locations
+chmod +x "$PRODUCTION_DIR/eml_to_obsidian.sh"
+chmod +x "$VERSION_DIR/eml_to_obsidian.sh"
+
+# Create a symlink to the latest version
+LATEST_LINK="$PRODUCTION_DIR/latest"
+if [ -L "$LATEST_LINK" ]; then
+    rm "$LATEST_LINK"
+fi
+ln -s "$VERSION_FOLDER" "$LATEST_LINK"
+
+echo "✅ Deployed to:"
+echo "   📁 Production root: $PRODUCTION_DIR/"
+echo "   📁 Version folder: $VERSION_DIR/"
+echo "   🔗 Latest symlink: $LATEST_LINK -> $VERSION_FOLDER"
+echo "   📝 Version info: $VERSION_INFO"
+
+exit 0

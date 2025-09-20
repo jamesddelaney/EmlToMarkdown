@@ -47,6 +47,7 @@ EmailToMarkdown/
 ├── test_email_conversion.sh     # Automated testing script
 ├── eml_to_obsidian_test.sh      # Regression testing script
 ├── pre-commit.template          # Pre-commit hook template for development
+├── post-commit.template         # Post-commit hook template for deployment
 ├── Examples/                    # Test email files (.eml format)
 ├── OutputApproved/              # Approved baseline outputs for testing
 ├── OutputTesting/               # Temporary directory for test output
@@ -257,6 +258,37 @@ The pre-commit hook will:
 - ❌ Block the commit if any tests fail
 
 This ensures that broken code never gets committed to the repository.
+
+### Post-commit Hook
+
+The repository includes a post-commit hook that automatically deploys production files:
+
+```bash
+# Set up the post-commit hook (run once after cloning)
+cp post-commit.template .git/hooks/post-commit
+chmod +x .git/hooks/post-commit
+```
+
+The post-commit hook will:
+- 🚀 Automatically deploy after successful commits
+- 📁 Copy the three main files to `Production/` root directory
+- 📁 Create versioned folders with timestamp + commit hash (e.g., `20250919_180744_5872ee1`)
+- 🔗 Create a `latest` symlink pointing to the most recent version
+- 📝 Generate version info files with commit details
+
+This creates a production-ready deployment structure:
+```
+Production/
+├── eml_to_obsidian.sh           # Latest production files
+├── email_to_markdown.py
+├── email_template.j2
+├── latest -> 20250919_180744_5872ee1/  # Symlink to latest version
+└── 20250919_180744_5872ee1/     # Versioned folder
+    ├── eml_to_obsidian.sh
+    ├── email_to_markdown.py
+    ├── email_template.j2
+    └── version_info.txt
+```
 
 ### Development Workflow
 
