@@ -1,0 +1,13 @@
+# Python dependencies for EmlToMarkdown
+# Install with: pip3 install -r requirements.txt
+
+jinja2>=3.0.0
+
+# Note: Gather CLI (https://brettterpstra.com/projects/gather-cli/) is REQUIRED
+# It's not a Python package - install separately via Homebrew:
+#   brew tap ttscoff/thelab
+#   brew install gather-cli
+#
+# Gather CLI provides superior HTML-to-Markdown conversion using Readability,
+# especially for complex marketing emails with table layouts.
+

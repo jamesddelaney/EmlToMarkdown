@@ -1,0 +1,1691 @@
+Received: from PH3PPF46688B9A1.NAMP221.PROD.OUTLOOK.COM (2603:10b6:518:1::5a0)
+ by SA1P221MB1020.NAMP221.PROD.OUTLOOK.COM with HTTPS; Thu, 25 Sep 2025
+ 17:46:23 +0000
+Received: from BN9PR03CA0752.namprd03.prod.outlook.com (2603:10b6:408:13a::7)
+ by PH3PPF46688B9A1.NAMP221.PROD.OUTLOOK.COM (2603:10b6:518:1::5a0) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.14; Thu, 25 Sep
+ 2025 17:46:21 +0000
+Received: from BL02EPF00021F6C.namprd02.prod.outlook.com
+ (2603:10b6:408:13a:cafe::eb) by BN9PR03CA0752.outlook.office365.com
+ (2603:10b6:408:13a::7) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9160.10 via Frontend Transport; Thu,
+ 25 Sep 2025 17:46:19 +0000
+Authentication-Results: spf=pass (sender IP is 50.31.156.121)
+ smtp.mailfrom=pm-bounces.fathom.video; dkim=pass (signature was verified)
+ header.d=pm.mtasv.net;dkim=pass (signature was verified)
+ header.d=fathom.video;dmarc=pass action=none
+ header.from=fathom.video;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of pm-bounces.fathom.video
+ designates 50.31.156.121 as permitted sender)
+ receiver=protection.outlook.com; client-ip=50.31.156.121;
+ helo=sc-ord-mta121.mtasv.net; pr=C
+Received: from sc-ord-mta121.mtasv.net (50.31.156.121) by
+ BL02EPF00021F6C.mail.protection.outlook.com (10.167.249.8) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9160.9
+ via Frontend Transport; Thu, 25 Sep 2025 17:46:20 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=pm20250324; d=pm.mtasv.net;
+ h=From:Date:Subject:To:Message-Id:MIME-Version:Content-Type:
+ Content-Transfer-Encoding:Date:From:Message-ID:Reply-To:Sender:Subject:To:CC;
+ t=1758822381; x=1758908781;
+ bh=jqghARV+Kg03S0M8GzNc3NIeFb6+mtdQMCZVulvsbRU=;
+ b=KtqX+O9F9+LI/3wPK4xOT/sbK2cI8zOPaL86K7GMawhf03LcwZ7elZzcfvwGMlGO3SIWNI8Jvjxe
+   qcKzDAfGXwjW1ty310vqkMwuTjZx1XllBl+uNeYBOqAPj7BfynabXmIUGm2AnFh1wJOFlEV+32Iu
+   dzQrdvJnuv5wOl1mq7kiQ3vv+q1AoJsj6IdonGdpGaY4kggNmOll7HSNNNkMvJbMv3l/D/qboPKe
+   iA50q74DZibAR3FlYunoXGlPz110aSGBSwFwMYLHpww3T+Nt5LKNGEWtS4QPMLmj19bgcOaKJxZs
+   FQuK28GJLuzaMuv3+Gy1UqdCLyoRgPvq58RqNg==
+Received: by sc-ord-mta121.mtasv.net id hqlvuo3b84kn for <jdelaney@counselfi.com>; Thu, 25 Sep 2025 13:46:20 -0400 (envelope-from <pm_bounces@pm-bounces.fathom.video>)
+X-PM-IP: 50.31.156.121
+X-IADB-IP: 50.31.156.121
+X-IADB-IP-REVERSE: 121.156.31.50
+DKIM-Signature: v=1; a=rsa-sha256; d=fathom.video; s=20210403211348pm;
+	c=relaxed/relaxed; i=no-reply@fathom.video; t=1758822380; x=1758995180;
+	h=date:date:from:from:message-id:reply-to:sender:subject:subject:to:to:cc:
+	feedback-id:mime-version:content-type:content-transfer-encoding;
+	bh=jqghARV+Kg03S0M8GzNc3NIeFb6+mtdQMCZVulvsbRU=;
+	b=MAqUsjefat9AmPTUNdCspwaR8Hfk8KOolvYSF5GRjegMPhH445yTN1cv+d1OAZ/Kl4VDmfg5SJL
+	jbibglWmrzRtjj/GTAay3uFHeE10lkvyvymJ+RwL68XCDY0fGc9YZqUd60MKGRzOFJkongmcntZOY
+	tQmDtJvk9Kz3BKm80U8=
+From: Fathom <no-reply@fathom.video>
+Date: Thu, 25 Sep 2025 17:46:20 +0000
+Subject: Recap of your meeting with Aleph
+To: James Delaney <jdelaney@counselfi.com>
+Message-Id: <68d57febe77f3_1140797c012047da@fathom-sidekiq-default-2-6887bffbc-vdvlj.mail>
+Feedback-ID: s6412821-_:s6412821:a207363:postmark
+X-Complaints-To: abuse@postmarkapp.com
+X-PM-Message-Id: c67e2adb-7c98-4ba6-84f7-169597028c30
+X-PM-RCPT: |bTB8MjA3MzYzfDY0MTI4MjF8amRlbGFuZXlAY291bnNlbGZpLmNvbQ==|
+X-PM-Message-Options: v1;1.Q1YV7890FmUHlwBB9256yw.xVUg31VqFHza_97R1XoTp1UXyyBqxVRWgzmOuZU5HcnEu6DKvNWepAE6SLVNjkYPr-5iW3_I_tBGu-UYaCjMIypbbXDmfwUCd-N5Gwqk6KLITo_zlOiblrn9-d6-fbu6i7fMBOeOA0Igs37FUk4V1h9quyWd9To7S_JN4EmIViSUCCemPiiWI96nH8w9Xrfs
+X-PM-MTA-Pool: transactional-1
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Return-Path: pm_bounces@pm-bounces.fathom.video
+X-MS-Exchange-Organization-ExpirationStartTime: 25 Sep 2025 17:46:21.2055
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id: 164a71c2-86b9-483b-b18e-08ddfc5b7041
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 2f9f0793-9625-45a3-ba59-7144bc5504c7:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF00021F6C:EE_|PH3PPF46688B9A1:EE_|SA1P221MB1020:EE_
+X-MS-Exchange-Organization-AuthSource: BL02EPF00021F6C.namprd02.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-Office365-Filtering-Correlation-Id: 164a71c2-86b9-483b-b18e-08ddfc5b7041
+X-MS-Exchange-Organization-SCL: -1
+X-Microsoft-Antispam: BCL:2;ARA:13230040|1032899013|5062899012|5073199012|4123199012|5063199012|3092899012|3072899012|2092899012|12012899012|13102899012|69100299015|13003099007|2066899003|8096899003;
+X-Forefront-Antispam-Report: CIP:50.31.156.121;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SFE;H:sc-ord-mta121.mtasv.net;PTR:sc-ord-mta121.mtasv.net;CAT:NONE;SFS:(13230040)(1032899013)(5062899012)(5073199012)(4123199012)(5063199012)(3092899012)(3072899012)(2092899012)(12012899012)(13102899012)(69100299015)(13003099007)(2066899003)(8096899003);DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2025 17:46:20.6573
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 164a71c2-86b9-483b-b18e-08ddfc5b7041
+X-MS-Exchange-CrossTenant-Id: 2f9f0793-9625-45a3-ba59-7144bc5504c7
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF00021F6C.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH3PPF46688B9A1
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:03.0221359
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.9137.014
+X-Microsoft-Antispam-Mailbox-Delivery:
+	wl:1;pcwl:1;ucf:0;jmr:0;auth:0;dest:I;ENG:(910005)(944506478)(944626604)(4710137)(4717077)(4999163)(920097)(811242)(255002)(410001)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?VnAwaWFEaTNIbUJlUCt5azd1OUpzUU8ycTRjQ29LWXpEZ2Z4dGJlL1VISnFz?=
+ =?utf-8?B?c0YwdlltYUs2OHBpTHFCWDdMSDYyYlV6cHVaYUJBRlFrQm5BVDBnTlJsWURh?=
+ =?utf-8?B?WHlMUEtrZ1EzR0R4c25mVXRUMUdZQXdSNWN5UTFyN3lHNFRXTm5jUXJ0Zjl5?=
+ =?utf-8?B?bDJRSU5vSkJqU2lOUUowbG1PN0xJeGI1LzdxWUozV202ZEZ1YjdFRkxYZW93?=
+ =?utf-8?B?SDRxWEdKRFNWcFdEV3JXK3VBVG9hNlZDeTBVdjMxQkhQMmpSU0VtZUNMYmJK?=
+ =?utf-8?B?THc3N3dPL0c0Z2JkSU1XL2hybUR4UEJxSk1IYTR1Ri9xMDZreHNxQUhJelRU?=
+ =?utf-8?B?YWwxMmdtTzFuSXVqTFA3SkNNUzZTU2NxRGtUWjJ1NnovVUduQUZjTWV6R0NT?=
+ =?utf-8?B?MDlkaUttNlhKSmZCb01kWUFaeE5jQVVlNUxmaXBTeS9jUXNUeUt2MytRRnBN?=
+ =?utf-8?B?SjBmN1VtcW94M0hTTDJjNE1ZNmQxUjErWDZlQTl4aFgrcjlhdWNoMytUNGVW?=
+ =?utf-8?B?KzRMcG8zSlZ4dWkwWEdkMzZVbFlwM2tPMHNXdkhuelNkWUM0WnQ0NGlBSElV?=
+ =?utf-8?B?aTFZekJzQlRpU3BZcXY1Z29iYVluQTNlMkdHaDhFWlFhV2plK0tFQWRCL245?=
+ =?utf-8?B?U0UxUXlNMVRTR2Q0YUl2UnRZdlZKN2tiS21ETkgyNitCbzBPbjNHZ29UVzdW?=
+ =?utf-8?B?U0N2RmlINHVBZWFkdGRqQmtDeDdUSFJUeEY3Q3V2dFJpd3pLTWhpLzloWVNj?=
+ =?utf-8?B?c0g4R1BFaVMrLzFYNERLQmFxQlJuT1JJWHh1TU5hNGxpelBYWm0wd05GbmFi?=
+ =?utf-8?B?OEVmSWhHYlltOXQ5bWlGTGZyMUdDc3JvRzFYUTM5VXhVT2JRU29CZEtIRktC?=
+ =?utf-8?B?VEJHUjh5NkNhSlBvZUFLVmh4NHZ4RVRKMmlJK25wNEszZDlhQkszUWxCdExE?=
+ =?utf-8?B?cmhOSkp4NkJoaDNvdnVNSWZ3b0l6dkFLUFFVemc0RUlmeHhldDdGVjk0THk0?=
+ =?utf-8?B?SkFTUWJSTnJWSXUxWjZEM2FDUWdxK2h1Qkdxdk1QSFFyODlyNUEvM0IrYUpT?=
+ =?utf-8?B?OXBpbUJaZFhaRVhweTF0cDcyWnlQV3pJUjY2ZkxsL200Y3FDODBzMmZlVDBM?=
+ =?utf-8?B?TS93bW52aEM5cCtpS2diRER2L0N2RCtzak9lUW8zQWRPWXRtVnBpZ3pocGVW?=
+ =?utf-8?B?NDdJMlRHeW0za0JRSkNVVlFKMEFXVkV3ckJDZDdXWmd2VUZqTHl1NjMxN0du?=
+ =?utf-8?B?RHl2dlpITE14OVpxZTUwWXlTSXZlbEwwblVZd1N5Vkk5Y1QxRVcvWVBtR0Iw?=
+ =?utf-8?B?ZjJPSUZZazcxZnlIYzVUaENzSGdTd3l4M1oxY2JhMFZvNXhBamlnMTltVksy?=
+ =?utf-8?B?RitPUVdMbDI2cmIvQXJvOGV3ckhMd1FQMjFvN0dvUmVhSHEvWGdWc1dhRFFO?=
+ =?utf-8?B?NnF3dUpsMEpxRklUZERmNXYrL3dRdnNodEwvM2pOVVdVRjZGazU2MFN4WHRx?=
+ =?utf-8?B?eDM0ajY5VnZvWC9aaXpMeUJzVDh4OHF3NCtZSlZHTzJ2V2JqdEJCOVVMMFJM?=
+ =?utf-8?B?Y1dXTGdHY1RPRDJJNVpYS25JaGxQWWtPNTRaaTVkRHltNWZ4N1ZibG03eTlC?=
+ =?utf-8?B?Y2x3dnR4N01Bc2k2NXF5MkJlSEJVeW5sbzgwMlUxUUhtYWxGMW9BenZ1R0ly?=
+ =?utf-8?B?MHN1YW4rSlhXb2dnaWJ2c1JMMExmZ2UzeXpWMDIvcXdpa3BCWFFpSHkrakly?=
+ =?utf-8?B?UENTcTNVVnBWL0FacFd0ZjdSTzZRYTc0RUZkWjdOaGd1L2E4ZCtkZ0huNWJS?=
+ =?utf-8?B?SEtHMC96bkZvak12N3ZjMFJwV1N0cStRYzZSdVpqVytPTUYySUw2OWQwRjl1?=
+ =?utf-8?B?SmNVTlNXZzFsc2YwVHVMV0xEa0JNYXEvQm15ZlplamVoWm1sWTdOU3VHNU5W?=
+ =?utf-8?B?ZEIzd3JsUzBSRHd4OHNFUXFrdGplR0FzbVBUaHhmM2gwdEovU0c0TlptT3h6?=
+ =?utf-8?B?Y3EvaU5zemllZE5jVHVGaXRaVHQ4em4wWXNUUWxLMmhocmxJRkdyOS80eFoy?=
+ =?utf-8?B?YUovK3JQaEh2ZUs3VVlQY1h4d1gxQTZTOFJQTG5kVGhsOFFWNW05L3lGRHVh?=
+ =?utf-8?B?dEJpL0IrWUh6Q3c0YWMwaEdWd0kvTWEvUDNXbTkwaFBqQVc2NjNob3EvMGJG?=
+ =?utf-8?B?cStURVlNSmZ1bFhGS1lBZmxJZ05CUFBMWXc1aHlEVVYxRTZhb2Y1REFkd3dT?=
+ =?utf-8?B?NGZmYXhISzBsc3BMaXhON2pvV09kbGRDSUxPWjBHZWtnNzRyTGZBeTE4NzA0?=
+ =?utf-8?B?MUc4ZTB6Tloxa1owOUE2SUpEK1FiS3F6azd1cll6NzVtKzFXWnRsR0FVaUg0?=
+ =?utf-8?B?SERqdkl6VFV1NkVlY1JCTlp5UTlPQkZISmdpYjg2VW50eE5UcXdEM0Z0Mm9S?=
+ =?utf-8?B?L1kreGhBVXY1b2NyZmJlazRadElyZmZoMUY4eHcwdUFLVEM1SnpYZFBCN3Ju?=
+ =?utf-8?B?UUxNQVNMb3dtNkVNeVdxMVFScUFmOG8vY1pNU3greEowNWk3d2FrTW93eGpu?=
+ =?utf-8?B?bDE4K3k0ODc3d2Q0WDVIa1FFQ3FCbWp5TDhOZVlOd3N5RnNPT3VjR1pPMjVa?=
+ =?utf-8?B?eHpqOFdud2JhZU9NVmtKUk5uc01xb0lTYndmQWZBSlhZM2ljWXdFR29jTm1K?=
+ =?utf-8?B?dE0zakZkNnNEOWVLN1FlT0t6SzhMQlZoSHBYUU9oZ0VBOGFOVHZNdU96WjFO?=
+ =?utf-8?B?Qm9ielhiYjlLQnpHTW1za3NRZTFabWpTdTVBTHIzdm5uQVZ5YjRKZTZzbi9x?=
+ =?utf-8?B?dE1hOWdzWnZENStMUDkxZGFwNmRkTDBIeDFuUFFrclo3T2RVeHprTVBCaWlW?=
+ =?utf-8?B?N1VWN0tqRFFaVHVwMVFzdWozUE9wZGNzWTVnVjZNd3ppVHI0UHEwcmxxSGcz?=
+ =?utf-8?B?OTlZMUpVTHlMZjJIS2FwVHZYZWl1RFNPT1I3RW9TTmcwcXY2bSsybjJtNEVK?=
+ =?utf-8?B?NDc4WElrbmljTGl0OE81ZWd1T3B4OGh2RndVL1V6eXRWWHVVdTBqMUpQSGVk?=
+ =?utf-8?Q?0/J9Qodc1wRVHeCbGsRDRiNnK9fhb4sI0=3D?=
+MIME-Version: 1.0
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns=3D"http://www.w3.=
+org/1999/xhtml" xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:sc=
+hemas-microsoft-com:office:office"><head><!--[if gte mso 9]><xml><o:OfficeD=
+ocumentSettings><o:AllowPNG/><o:PixelsPerInch>96</o:PixelsPerInch></o:Offic=
+eDocumentSettings></xml><![endif]-->
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle>FATHOM</title>
+   =20
+    <meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=
+=3D1.0">
+    <link href=3D"https://fonts.googleapis.com/css?family=3DInter:300,400,5=
+00,600,700" rel=3D"stylesheet">
+    <style type=3D"text/css">
+      a{
+        outline:none;
+        color:#00BEFF;
+        text-decoration:underline;
+      }
+      a:hover{text-decoration:none!important;}
+      .h-u a{text-decoration:none;}
+      .h-u a:hover{text-decoration:underline!important;}
+      a[x-apple-data-detectors]{color:inherit!important; text-decoration:no=
+ne!important;}
+      a[href^=3D"tel"]:hover{text-decoration:none!important;}
+      .active-i a:hover,
+      .active-t td:hover{opacity:0.8;}
+      .active-i a,
+      .active-t td{transition:all 0.3s ease;}
+      a img{border:none;}
+      b, strong{font-weight:700;}
+      p{margin:0;}
+      th{padding:0;}
+      table td{mso-line-height-rule:exactly;}
+      #emailBody #emailWrapper [x-apple-data-detectors]{color:inherit!impor=
+tant;text-decoration:inherit!important;}
+      .l-white a{color:#fff;}
+      :root{color-scheme:light;}
+      [style*=3D"Inter"]{font-family:'Inter', Arial, Helvetica, sans-serif =
+!important}
+      [style*=3D"Inter500"]{font-weight:500!important; font-family:'Inter',=
+ Arial, Helvetica, sans-serif !important}
+      .ico-block-02 a:hover{color:#fff!important;}
+      .ico-block-03 a:hover {text-decoration:underline!important; color:#20=
+C5FF!important;}
+      .ico-block-03 a:hover .ico-hover{display:inline-block!important;}
+      .ico-block-03 a:hover .ico-hover img{display:block; width:36px!import=
+ant; height:auto!important;}
+      @media only screen and (max-width:817px) {
+        .w-100p{width:100%!important;}
+        .tflex{display:block!important;width:100%!important;}
+        .f-l{float:left!important;}
+        .f-r{float:right!important;}
+        .ta-l{text-align:left!important;}
+        .ta-r{text-align:right!important;}
+        .hm{display:none!important;width:0!important;height:0!important;pad=
+ding:0!important;font-size:0!important;line-height:0!important;}
+        .w-8{width:8px!important;}
+        .w-10{width:10px!important;}
+        .wi-100p img{width:100%!important;height:auto!important;}
+        .p-0{padding:0!important;}
+        .ptb-20{padding-top:20px!important;padding-bottom:20px!important;}
+        .ptb-30{padding-top:30px!important;padding-bottom:30px!important;}
+        .pl-30{padding-left:30px!important;}
+        .pt-0{padding-top:0!important;}
+        .pt-5{padding-top:5px!important;}
+        .pt-15{padding-top:15px!important;}
+        .pt-20{padding-top:20px!important;}
+        .pb-9{padding-bottom:9px!important;}
+        .pb-10{padding-bottom:10px!important;}
+        .pb-20{padding-bottom:20px!important;}
+        .fs-13{font-size:13px!important;}
+        .fs-14{font-size:14px!important;}
+        .fs-16{font-size:16px!important;}
+        .fs-18{font-size:18px!important;}
+        .fs-20{font-size:20px!important;}
+        .fs-24{font-size:24px!important;}
+        .lh-17{line-height:17px!important;}
+        .lh-18{line-height:18px!important;}
+        .lh-20{line-height:20px!important;}
+        .lh-22{line-height:22px!important;}
+        .lh-24{line-height:24px!important;}
+        .lh-25{line-height:25px!important;}
+        .lh-30{line-height:30px!important;}
+        .maxw-560{max-width:560px!important;}
+        .ico-holder{ float:left; width:16px;}
+      }
+      @media only screen and (max-width:389px) {
+        .fs-11-390{font-size:11px!important;}
+        .lh-14-390{line-height:13px!important;}
+      }
+      @media (prefers-dark-interface) {body{-apple-color-filter:none;}}
+      .ai_notes_html_content a:hover {
+        color: #00beff;
+        text-decoration-line: underline !important;
+        -webkit-text-decoration-color:#54565B;
+        text-decoration-color:#54565B;
+      }
+      .ai_notes_html_content a:hover img {
+        display: inline-block;
+        width: 48px !important;
+      }
+      .ai_notes_html_content a:hover .ico-hover {
+        display:inline-block!important;
+      }
+      .ai_notes_html_content a:hover .ico-hover img {
+        display:block;
+        width:36px!important;
+        height:auto!important;
+      }
+      .underline {
+        text-decoration-line: underline;
+        text-decoration-style: solid;
+        text-decoration-skip-ink: none;
+        text-decoration-thickness: auto;
+        text-underline-offset: auto;
+        text-underline-position: from-font;
+      }
+    </style>
+    <style type=3D"text/css">
+      @import url(https://fonts.googleapis.com/css?family=3DInter:300,400,5=
+00,600,700);
+    </style>
+  </head>
+  <body id=3D"emailBody" style=3D"margin:0; padding:0; -webkit-text-size-ad=
+just:100%; -ms-text-size-adjust:100%; -webkit-font-smoothing:antialiased; -=
+moz-osx-font-smoothing:grayscale; text-rendering:optimizeLegibility;">
+    <div style=3D"display:none;">Meeting Purpose
+
+Discuss pricing and partnership model between Aleph and CounselFi for scala=
+ble financial services.
+
+Key Takeaways
+
+  - Aleph offers tiered pricing: ~$30/mo for bookkeeping clients, higher fo=
+r strategic finance services
+  - CounselFi sees value in starting clients with basic integration, then u=
+pselling more advanced features
+  - Aleph to provide detailed pricing spreadsheet and mock implementation p=
+lan by end of day
+  - Both parties align on the potential for mutually beneficial, scalable p=
+artnership
+
+Topics
+
+CounselFi's Business Model and Needs
+
+  - 40-50 client business, aiming for rapid growth over next 3 years
+  - Offers tiered services: bookkeeping, strategic finance, and a middle ti=
+er
+  - Seeks tools to elevate FP&amp;A capabilities and complement existing st=
+ack (e.g., Keeper)
+  - Values Aleph's quick QuickBooks integration and out-of-the-box financia=
+l analysis
+
+Aleph's Tiered Pricing Structure
+
+  - Standard pricing: $35,000-$45,000 ACV for direct customers
+  - Partner pricing: Up to 90% discount with scale commitment
+  - Bookkeeping tier: ~$30/month per client
+  - Strategic finance tier: Higher pricing, closer to previously quoted $4,=
+000/year
+  - Pricing based on service complexity, integrations, and support needs
+
+Partnership Value Proposition
+
+  - Aleph provides scalable templates for consistent client onboarding
+  - Offers data checks, AI-assisted journal entries, and benchmarking capab=
+ilities
+  - Enables CounselFi to easily upsell clients from basic to advanced servi=
+ces
+  - Positions CounselFi as a de facto sales channel for Aleph, with mutual =
+benefits
+
+Implementation Strategy
+
+  - Aleph to provide mock implementation plan
+  - Aim to onboard all 45 CounselFi clients within 3-6 months
+  - First month focused on building scalable templates with CounselFi
+  - Goal: 15-minute client setup from QuickBooks connection to full populat=
+ion
+
+Next Steps
+
+  - Aleph to send detailed pricing spreadsheet to CounselFi by end of day
+  - Aleph to create and share mock implementation plan
+  - CounselFi to review materials and discuss internally with Tamara
+  - Follow-up meeting to be scheduled after CounselFi's internal review
+</div>
+    <table id=3D"emailWrapper" width=3D"100%" style=3D"min-width:320px;" ce=
+llspacing=3D"0" cellpadding=3D"0">
+      <tr>
+        <td class=3D"p-0" style=3D"padding:30px 0;">
+          <table class=3D"w-100p" width=3D"560" align=3D"center" style=3D"m=
+ax-width:560px; margin:0 auto;" cellpadding=3D"0" cellspacing=3D"0">
+            <tr>
+              <td class=3D"pt-15" style=3D"padding:18px 0px 20px;">
+                <table class=3D"maxw-560" style=3D"max-width:640px; width:1=
+00% !important; margin:0;" cellpadding=3D"0" cellspacing=3D"0">
+                  <tr>
+                    <td>
+                      <table width=3D"100%" cellpadding=3D"0" cellspacing=
+=3D"0">
+                        <tr>
+                          <td align=3D"left">
+                            <a style=3D"text-decoration:none;" href=3D"http=
+s://fathom.video/?utm_campaign=3Dpostmeetingsummary&amp;utm_content=3Dheade=
+r&amp;utm_medium=3Demail">
+                              <img src=3D"https://storage.googleapis.com/fa=
+thom-static-web-assets/courier/mailers/post-meeting/fathom-logo-black-2025.=
+png" width=3D"152" alt=3D"FATHOM">
+                            </a>
+                          </td>
+                            <td align=3D"right">
+                              <a class=3D"underline" style=3D"font:12px/16p=
+x Arial, Helvetica, sans-serif, Inter; color:#0070AC; letter-spacing:-.1px;=
+" href=3D"https://fathom.video/invite/px6_1Q?utm_medium=3Demail&amp;utm_cam=
+paign=3Dpostmeetingsummary&amp;utm_content=3Dheader_ad">
+                                <b>Get your own FREE AI Meeting Assistant</=
+b>
+                              </a>
+                                <br>
+                                <a style=3D"text-decoration:none;" href=3D"=
+https://www.g2.com/products/fathom-2021-09-22/reviews">
+                                  <img src=3D"https://storage.googleapis.co=
+m/fathom-static-web-assets/courier/mailers/post-meeting/g2-rating.png" widt=
+h=3D"203" alt=3D"#1 rated on G2, 5/5, 5000+ reviews">
+                                </a>
+                            </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td class=3D"pt-15">
+                <table class=3D"maxw-560" style=3D"max-width:640px; width:1=
+00% !important; margin:0;" cellpadding=3D"0" cellspacing=3D"0">
+                  <tr>
+                    <td style=3D"padding:0 0 20px;">
+                      <table width=3D"100%" cellpadding=3D"0" cellspacing=
+=3D"0">
+                        <tr>
+                          <th class=3D"tflex" align=3D"left" style=3D"verti=
+cal-align:top;">
+                            <table width=3D"100%" cellpadding=3D"0" cellspa=
+cing=3D"0">
+                              <tr>
+                                <td class=3D"pt-0 pb-9" style=3D"padding:8p=
+x 0 5px;">
+                                  <table cellpadding=3D"0" cellspacing=3D"0=
+">
+                                    <tr>
+                                      <td style=3D"font:600 16px/20px Arial=
+, Helvetica, sans-serif, Inter; color:#606167;">
+                                        Meeting with Aleph
+                                      </td>
+                                    </tr>
+                                  </table>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td class=3D"fs-24 lh-30" style=3D"padding:=
+0 0 3px; font:700 28px/35px Arial, Helvetica, sans-serif, Inter; color:#000=
+; letter-spacing:-.6px;">
+                                  Aleph commercial discussion
+                                </td>
+                              </tr>
+                              <tr>
+                                <td style=3D"font:500 13px/17px Arial, Helv=
+etica, sans-serif, Inter; color:#6C6D72; letter-spacing:-.2px;">
+                                  September 25, 2025&nbsp;&nbsp;<span style=
+=3D"color:#D3D3D3;">=E2=80=A2</span>&nbsp;
+                                  14 mins&nbsp; <span style=3D"color:#D3D3D=
+3;">=E2=80=A2</span>&nbsp;
+                                  <a class=3D"underline" style=3D"color:#00=
+70AC;" href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?=
+tab=3Dsummary&amp;utm_campaign=3Dpostmeetingsummary&amp;utm_content=3Dview_=
+recording_link&amp;utm_medium=3Demail">View Meeting</a>
+                                  or <a class=3D"underline" style=3D"color:=
+#0070AC;" href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR=
+2N?tab=3Dask_fathom&amp;utm_campaign=3Dpostmeetingsummary&amp;utm_content=
+=3Dask_fathom&amp;utm_medium=3Demail">Ask Fathom</a>
+                                </td>
+                              </tr>
+                            </table>
+                          </th>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class=3D"ptb-20" style=3D"border-radius:10px;">
+                      <table width=3D"560" align=3D"center" style=3D"max-wi=
+dth:560px; width:100% !important; margin:0px;" cellpadding=3D"0" cellspacin=
+g=3D"0">
+                        <tr>
+                          <td class=3D"fs-20 lh-25" style=3D"padding:19px 0=
+ 10px; font:700 14px/17px Arial, Helvetica, sans-serif, Inter; color:#9C9C9=
+C; letter-spacing:-.28px; text-transform: uppercase;">
+                            Action Items =E2=9C=A8
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class=3D"pb-10" style=3D"padding:0 0 15px;">
+                            <table width=3D"100%" cellpadding=3D"0" cellspa=
+cing=3D"0">
+                              <tr>
+                                <td width=3D"16" valign=3D"top" style=3D"pa=
+dding:0 0 15px; line-height:1px; font-size:1px; mso-line-height-rule:at-lea=
+st;">
+                                  <img src=3D"https://storage.googleapis.co=
+m/fathom-static-web-assets/courier/mailers/post-meeting/ico-05.png" width=
+=3D"16" style=3D"width:16px; display:block; vertical-align:top;" alt=3D"">
+                                </td>
+                                <td width=3D"12" style=3D"padding:0 0 15px;=
+"></td>
+                                <td valign=3D"top" style=3D"padding:0 0 15p=
+x;">
+                                  <table width=3D"100%" cellpadding=3D"0" c=
+ellspacing=3D"0">
+                                    <tr>
+                                      <td class=3D"ico-block-03 fs-14 lh-18=
+" style=3D"padding:0 0 3px; font:600 14px/18px Arial, Helvetica, sans-serif=
+, Inter; color:#000; letter-spacing:-.14px;">
+                                        <a style=3D"color:#000; text-decora=
+tion:none;" href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsD=
+uR2N?tab=3Dsummary&amp;timestamp=3D792.9999&amp;utm_campaign=3Dpostmeetings=
+ummary&amp;utm_content=3Daction_item&amp;utm_medium=3Demail">
+                                          Create &amp; send spreadsheet to =
+James - tiered pricing model (bookkeeping vs strategic finance clients), mo=
+ck implementation plan (timeline for onboarding 45 clients)
+<span class=3D"ico-hover" style=3D"display:none; font-size:0; line-height:0=
+; vertical-align: middle; margin: 0 0 0 5px;"><img src=3D"https://storage.g=
+oogleapis.com/fathom-static-web-assets/courier/mailers/post-meeting/ico-pla=
+y-black.png" width=3D"30" height=3D"30" style=3D"width:30px; height:auto; v=
+ertical-align:top; border:none;" alt=3D""></span><span style=3D"font:600 10=
+px/12px Arial, Helvetica, sans-serif, Inter;"></span>
+                                        </a>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td class=3D"ico-block-02" style=3D"f=
+ont:12px/15.6px Arial, Helvetica, sans-serif, Inter; color:#6C6D72; letter-=
+spacing:-.12px;">
+                                        Reid Gridley
+                                      </td>
+                                    </tr>
+                                  </table>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td style=3D"padding:0px;">
+                            <table cellpadding=3D"0" cellspacing=3D"0">
+                              <tr>
+                                <td colspan=3D"3" class=3D"fs-20 lh-24 fs-1=
+1-390 lh-13-390" style=3D"font:700 14px/17px Arial, Helvetica, sans-serif, =
+Inter; color:#9C9C9C; letter-spacing:-.28px; text-transform: uppercase;">
+                                  Meeting Summary =E2=9C=A8
+                                </td>
+                              </tr>
+                              <tr>
+                                <td height=3D"12"></td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td style=3D"padding:0 0 15px;">
+                            <div class=3D"ai_notes_html_content">
+                              <h2 style=3D"
+      padding: 0 0 5px;
+      color: #000;
+      letter-spacing: -0.3px;
+      font: 700 16px/20px Arial, Helvetica, sans-serif, Inter;
+      margin: 25px 0 0 0;
+    ">Meeting Purpose</h2>
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0 0 25px 0;
+    ">
+Discuss pricing and partnership model between Aleph and CounselFi for scala=
+ble financial services.
+</p>
+<h2 style=3D"
+      padding: 0 0 5px;
+      color: #000;
+      letter-spacing: -0.3px;
+      font: 700 16px/20px Arial, Helvetica, sans-serif, Inter;
+      margin: 25px 0 0 0;
+    ">Key Takeaways</h2>
+<ul style=3D"
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      color: #d3d3d3;
+      padding: 0;
+      margin: 0 0 25px 0;
+    ">
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D620.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Aleph offers tiered pr=
+icing: ~$30/mo for bookkeeping clients, higher for strategic finance servic=
+es<span class=3D"ico-hover" style=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D720.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">CounselFi sees value i=
+n starting clients with basic integration, then upselling more advanced fea=
+tures<span class=3D"ico-hover" style=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D799.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Aleph to provide detai=
+led pricing spreadsheet and mock implementation plan by end of day<span cla=
+ss=3D"ico-hover" style=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D788.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Both parties align on =
+the potential for mutually beneficial, scalable partnership<span class=3D"i=
+co-hover" style=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+</ul>
+<h2 style=3D"
+      padding: 0 0 5px;
+      color: #000;
+      letter-spacing: -0.3px;
+      font: 700 16px/20px Arial, Helvetica, sans-serif, Inter;
+      margin: 25px 0 0 0;
+    ">Topics</h2>
+<h3 style=3D"
+      padding: 0 0 5px;
+      color: #000;
+      letter-spacing: -0.3px;
+      font: 700 14px/18px Arial, Helvetica, sans-serif, Inter;
+      margin: 0;
+    ">CounselFi's Business Model and Needs</h3>
+<ul style=3D"
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      color: #d3d3d3;
+      padding: 0;
+      margin: 0 0 25px 0;
+    ">
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D364.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">40-50 client business,=
+ aiming for rapid growth over next 3 years<span class=3D"ico-hover" style=
+=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D499.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Offers tiered services=
+: bookkeeping, strategic finance, and a middle tier<span class=3D"ico-hover=
+" style=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D393.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Seeks tools to elevate=
+ FP&amp;A capabilities and complement existing stack (e.g., Keeper)<span cl=
+ass=3D"ico-hover" style=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D243.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Values Aleph's quick Q=
+uickBooks integration and out-of-the-box financial analysis<span class=3D"i=
+co-hover" style=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+</ul>
+<h3 style=3D"
+      padding: 0 0 5px;
+      color: #000;
+      letter-spacing: -0.3px;
+      font: 700 14px/18px Arial, Helvetica, sans-serif, Inter;
+      margin: 0;
+    ">Aleph's Tiered Pricing Structure</h3>
+<ul style=3D"
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      color: #d3d3d3;
+      padding: 0;
+      margin: 0 0 25px 0;
+    ">
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D660.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Standard pricing: $35,=
+000-$45,000 ACV for direct customers<span class=3D"ico-hover" style=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D676.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Partner pricing: Up to=
+ 90% discount with scale commitment<span class=3D"ico-hover" style=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D712.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Bookkeeping tier: ~$30=
+/month per client<span class=3D"ico-hover" style=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D701.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Strategic finance tier=
+: Higher pricing, closer to previously quoted $4,000/year<span class=3D"ico=
+-hover" style=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D632.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Pricing based on servi=
+ce complexity, integrations, and support needs<span class=3D"ico-hover" sty=
+le=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+</ul>
+<h3 style=3D"
+      padding: 0 0 5px;
+      color: #000;
+      letter-spacing: -0.3px;
+      font: 700 14px/18px Arial, Helvetica, sans-serif, Inter;
+      margin: 0;
+    ">Partnership Value Proposition</h3>
+<ul style=3D"
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      color: #d3d3d3;
+      padding: 0;
+      margin: 0 0 25px 0;
+    ">
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D835.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Aleph provides scalabl=
+e templates for consistent client onboarding<span class=3D"ico-hover" style=
+=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D517.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Offers data checks, AI=
+-assisted journal entries, and benchmarking capabilities<span class=3D"ico-=
+hover" style=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D727.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Enables CounselFi to e=
+asily upsell clients from basic to advanced services<span class=3D"ico-hove=
+r" style=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D765.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Positions CounselFi as=
+ a de facto sales channel for Aleph, with mutual benefits<span class=3D"ico=
+-hover" style=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+</ul>
+<h3 style=3D"
+      padding: 0 0 5px;
+      color: #000;
+      letter-spacing: -0.3px;
+      font: 700 14px/18px Arial, Helvetica, sans-serif, Inter;
+      margin: 0;
+    ">Implementation Strategy</h3>
+<ul style=3D"
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      color: #d3d3d3;
+      padding: 0;
+      margin: 0 0 25px 0;
+    ">
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D805.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Aleph to provide mock =
+implementation plan<span class=3D"ico-hover" style=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D809.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Aim to onboard all 45 =
+CounselFi clients within 3-6 months<span class=3D"ico-hover" style=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D823.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">First month focused on=
+ building scalable templates with CounselFi<span class=3D"ico-hover" style=
+=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D835.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Goal: 15-minute client=
+ setup from QuickBooks connection to full population<span class=3D"ico-hove=
+r" style=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+</ul>
+<h2 style=3D"
+      padding: 0 0 5px;
+      color: #000;
+      letter-spacing: -0.3px;
+      font: 700 16px/20px Arial, Helvetica, sans-serif, Inter;
+      margin: 25px 0 0 0;
+    ">Next Steps</h2>
+<ul style=3D"
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      color: #d3d3d3;
+      padding: 0;
+      margin: 0 0 25px 0;
+    ">
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D799.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Aleph to send detailed=
+ pricing spreadsheet to CounselFi by end of day<span class=3D"ico-hover" st=
+yle=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D805.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Aleph to create and sh=
+are mock implementation plan<span class=3D"ico-hover" style=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D858.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">CounselFi to review ma=
+terials and discuss internally with Tamara<span class=3D"ico-hover" style=
+=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+<li style=3D"
+      padding: 0 0 0 3px;
+      margin: 0 0 0 23px;
+      font-size: 21px;
+    ">
+<p style=3D"
+      color: #606167;
+      font: 13px/18px Arial, Helvetica, sans-serif, Inter;
+      letter-spacing: -0.2px;
+      padding: 0;
+      margin: 0;
+    ">
+<a style=3D"
+      color: #606167;
+      text-decoration-line: underline !important;
+      -webkit-text-decoration-color:#60616780;
+      text-decoration-color:#60616780;
+    " href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?t=
+ab=3Dsummary&amp;timestamp=3D864.0&amp;utm_campaign=3Dpostmeetingsummary&am=
+p;utm_content=3Dsummary_item&amp;utm_medium=3Demail">Follow-up meeting to b=
+e scheduled after CounselFi's internal review<span class=3D"ico-hover" styl=
+e=3D"
+        display:none;
+        font-size:0;
+        line-height:0;
+        vertical-align: middle;
+      "><img src=3D"https://storage.googleapis.com/fathom-static-web-assets=
+/courier/mailers/post-meeting/ico-play-black.png" width=3D"30" height=3D"30=
+" style=3D"
+        width:30px;
+        height:auto;
+        vertical-align:top;
+        margin: 0 0 0 5px;
+        border:none;
+      "></span></a>
+</p>
+</li>
+</ul>
+
+                            </div>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td style=3D"padding:1px 0 0;">
+                            <table width=3D"100%" cellpadding=3D"0" cellspa=
+cing=3D"0">
+                              <tr class=3D"active-t">
+                                <td class=3D"fs-18 lh-22" align=3D"center" =
+style=3D"background:#00BEFF; mso-padding-alt:13px 15px; font:bold 20px/24px=
+ Arial, Helvetica, sans-serif, Inter; border-radius:6px;">
+                                  <a style=3D"color:#000; text-decoration:n=
+one; display:block; padding:13px 15px;" href=3D"https://fathom.video/share/=
+6noW1tLx-tQxhTq_hf36wJFBjRsDuR2N?tab=3Dsummary&amp;utm_campaign=3Dpostmeeti=
+ngsummary&amp;utm_content=3Dview_recording_button&amp;utm_medium=3Demail">V=
+iew Meeting =E2=86=92</a>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+
+
+                        <tr height=3D"25"></tr>
+                        <tr>
+                          <td>
+                            <table width=3D"560" style=3D"max-width:560px; =
+width: 560px; background-color: #00BEFF1A;">
+                              <tr>
+                                <td style=3D"width: 250px; padding: 20px 5p=
+x 8px 20px; vertical-align: top;">
+                                  <table>
+                                    <tr>
+                                      <td>
+                                        <img src=3D"https://storage.googlea=
+pis.com/fathom-static-web-assets/courier/mailers/post-meeting/robot.png" wi=
+dth=3D"32">
+                                      </td>
+                                    </tr>
+                                    <tr height=3D"10"></tr>
+                                    <tr>
+                                      <td style=3D"font:700 14px/16px Arial=
+, Helvetica, sans-serif, Inter; color:#2D2D31; letter-spacing:-.4px;">
+                                        Ask Fathom!
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td style=3D"font:500 14px/16px Arial=
+, Helvetica, sans-serif, Inter; color:#3D3D44; letter-spacing:-.28px;">
+                                        Ask our AI Assistant for answers an=
+d insights. It's ChatGPT for your meetings!
+                                      </td>
+                                    </tr>
+                                    <tr height=3D"10"></tr>
+                                    <tr>
+                                      <td>
+                                        <a class=3D"underline" style=3D"fon=
+t:500 14px/16px Arial, Helvetica, sans-serif, Inter; color:#0070AC; letter-=
+spacing:-.28px;" href=3D"https://fathom.video/share/6noW1tLx-tQxhTq_hf36wJF=
+BjRsDuR2N?tab=3Dask_fathom&amp;utm_campaign=3Dpostmeetingsummary&amp;utm_co=
+ntent=3Dask_fathom_footer&amp;utm_medium=3Demail">Try Ask Fathom =E2=86=92<=
+/a>
+                                      </td>
+                                    </tr>
+                                    </table>
+                                </td>
+                                <td style=3D"padding: 8px;">
+                                  <img src=3D"https://storage.googleapis.co=
+m/fathom-static-web-assets/courier/mailers/post-meeting/ask-fathom-screensh=
+ot.png" width=3D"310">
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td style=3D"padding:24px 0 0;">
+                      <table width=3D"100%" cellpadding=3D"0" cellspacing=
+=3D"0">
+                        <tr>
+                          <th width=3D"250" align=3D"center" style=3D"font:=
+700 12px/17px Arial, Helvetica, sans-serif, Inter500; color:#6C6D72; vertic=
+al-align:top;">
+                              <table cellpadding=3D"0" cellspacing=3D"0">
+                                  <tr>
+                                    <td style=3D"font:700 13px/28px Arial, =
+Helvetica, sans-serif, Inter; color:#000;">
+                                      Never take notes again.
+                                      <a class=3D"underline" style=3D"color=
+:#0070AC; text-decoration:underline;" href=3D"https://fathom.video/invite/p=
+x6_1Q?utm_medium=3Demail&amp;utm_campaign=3Dpostmeetingsummary&amp;utm_cont=
+ent=3Dfooter">Sign up for Free</a>
+                                    </td>
+                                  </tr>
+                                    <tr>
+                                      <td style=3D"font:500 11px/13px Arial=
+, Helvetica, sans-serif, Inter500; color:#6C6D72;">
+                                        =F0=9F=8E=81 Referral bonus: Sign u=
+p now and unlock a free month of Premium for you
+                                      </td>
+                                    </tr>
+                              </table>
+                          </th>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td height=3D"20"></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <table width=3D"100%" cellpadding=3D"0" cellspacing=
+=3D"0">
+                        <tr>
+                          <td align=3D"center">
+                            <a style=3D"text-decoration:none;" href=3D"http=
+s://www.g2.com/products/fathom-2021-09-22/reviews">
+                              <img src=3D"https://storage.googleapis.com/fa=
+thom-static-web-assets/courier/mailers/post-meeting/rating.png" width=3D"15=
+3">
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

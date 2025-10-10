@@ -4,42 +4,84 @@ A powerful command-line tool that converts EML (email) files to well-structured 
 
 ## 🚨 Quick Troubleshooting for Future Self
 
-**When adding a new EML file and conversion isn't working:**
+**You only come here when email parsing is broken. Here's the iterative debugging workflow:**
 
-### 1. **Quick Test**
+### 1. **Add the Problem Email**
 ```bash
-# Test the new email
-DEBUG=true ./eml_to_obsidian.sh "Examples/Your_New_Email.eml"
-
-# Check the debug log
-tail -20 /tmp/email_to_md_debug.log
+# Save the .eml file to Examples/
+# Print the email to PDF from your email client (visual reference for what it SHOULD look like)
+cp ~/path/to/email.eml Examples/
+cp ~/path/to/email.pdf Examples/
 ```
 
-### 2. **Common Issues**
-- **Date parsing**: Check if email date is being extracted correctly
-- **Attachments**: Look for "Found X attachments" vs "Found X embedded images" in logs
-- **Special characters**: Check if filename has spaces/special chars (use quotes)
-
-### 3. **Add to Test Suite**
+### 2. **Run Initial Test to See What's Wrong**
 ```bash
-# Run tests to make sure nothing broke
+# Test the new email and see the output
+DEBUG=true OUTPUT_DIR=OutputTesting SKIP_OBSIDIAN=true ./eml_to_obsidian.sh "Examples/Your_Email.eml"
+
+# Check debug logs for issues
+tail -50 /tmp/email_to_md_debug.log
+
+# Compare markdown to PDF to see what's broken
+# Look at: OutputTesting/📧 YYYY-MM-DD Your_Email/📧 YYYY-MM-DD Your_Email.md
+```
+
+### 3. **Identify & Fix Parser Issues**
+Common issues to look for:
+- **Date parsing wrong**: Check date format in email header vs parsed folder name
+- **Attachments duplicated**: "Found X attachments" vs "Found X embedded images" in logs  
+- **Missing images**: Check CID references and attachment extraction
+- **Formatting broken**: HTML to Markdown conversion issues
+- **Special characters**: Filenames with spaces, newlines, or special chars
+
+### 4. **Iterative Fix & Test Loop**
+```bash
+# Edit email_to_markdown.py or eml_to_obsidian.sh to fix the issue
+# Test again
+DEBUG=true OUTPUT_DIR=OutputTesting SKIP_OBSIDIAN=true ./eml_to_obsidian.sh "Examples/Your_Email.eml"
+
+# Repeat until output matches the PDF reference
+```
+
+### 5. **Run Full Regression Test**
+```bash
+# Make sure your fix didn't break existing emails
 ./eml_to_obsidian_test.sh
 
-# If new email needs approval
+# If tests fail, review the diff
+./eml_to_obsidian_test.sh --show-diff
+
+# Approve changes only after manual review
 ./eml_to_obsidian_test.sh --interactive
+# OR auto-approve if you're confident
+./eml_to_obsidian_test.sh --auto-approve
 ```
 
-### 4. **Remember the Hooks**
-- **Pre-commit hook**: Runs tests before allowing commits (blocks if tests fail)
+### 6. **Git Hooks Enforce Quality**
+- **Pre-commit hook**: Runs ALL tests before allowing commits (blocks if ANY test fails)
 - **Post-commit hook**: Auto-deploys to `Production/` folder with versioning
 - **Setup**: `cp pre-commit.template .git/hooks/pre-commit && cp post-commit.template .git/hooks/post-commit && chmod +x .git/hooks/*`
 
-### 5. **Commit Process**
+### 7. **Commit Only After Manual Approval**
 ```bash
-git add Examples/Your_New_Email.eml
-git commit -m "Add new email example"
-# Pre-commit runs tests, post-commit deploys to Production/
+# Add the new email and its approved baseline
+git add Examples/Your_Email.eml Examples/Your_Email.pdf
+git add OutputApproved/📧*Your_Email/
+
+# Commit with description of what you fixed
+git commit -m "Fix date parsing for emails with 'DD Mon YYYY' format
+
+- Added new test case: Your_Email.eml
+- Fixed date extraction regex in eml_to_obsidian.sh
+- All regression tests pass"
+
+# Pre-commit runs tests automatically, post-commit deploys to Production/
 ```
+
+### 8. **Future Automation Ideas**
+- **Visual diff tool**: Compare PDF vs Markdown side-by-side
+- **Auto-fix suggestions**: AI analyzes diff and suggests parser changes
+- **One-command workflow**: `./fix_email.sh Examples/email.eml Examples/email.pdf`
 
 ---
 
@@ -54,15 +96,27 @@ git commit -m "Add new email example"
 - **🎨 Obsidian Integration**: Opens converted emails directly in Obsidian
 - **📝 Template System**: Customizable Jinja2 template for output formatting
 - **🔍 Debug Logging**: Comprehensive logging for troubleshooting
+- **✨ Smart HTML Parsing**: Uses Gather CLI with Readability for superior conversion of complex HTML emails (falls back to html2text if unavailable)
 
 ## Quick Start
 
 ### Prerequisites
 
-Install required Python packages:
+**1. Install Gather CLI (required)**
+
+Gather CLI provides superior HTML-to-Markdown conversion using Readability, especially for complex marketing emails with table layouts.
 
 ```bash
-pip3 install html2text jinja2 beautifulsoup4
+# Install via Homebrew
+brew tap ttscoff/thelab
+brew install gather-cli
+```
+
+**2. Install required Python packages:**
+
+```bash
+pip3 install -r requirements.txt
+# Or manually: pip3 install jinja2
 ```
 
 ### Basic Usage

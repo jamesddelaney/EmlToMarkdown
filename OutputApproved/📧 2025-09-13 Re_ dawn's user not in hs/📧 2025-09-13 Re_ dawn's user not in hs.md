@@ -34,8 +34,8 @@ Not sure - she's mapped according to this screen and she's been successfully exp
 
 ![image.png](attachments/image.png)
 
-On Sat, Sep 13, 2025 at 8:29 AM James Delaney <[jdelaney@counselfi.com](<mailto:jdelaney@counselfi.com>)> wrote:
+On Sat, Sep 13, 2025 at 8:29 AM James Delaney < [jdelaney@counselfi.com](mailto:jdelaney@counselfi.com)> wrote:
 
-> do you know why?![](attachments/image.png)
+> do you know why? ![](attachments/image.png)
 
 ![](https://yourhsadmin.com/e3t/Cto/DR+23284/d5Pyg-04/R5R8b45x9N6S87yc2fJ7wW21gBg-3GKNtbW1Vnpwr1XnCMDW1Gdp6c3JF0f8W1-YpwQ1SrYc4W20XhDf20W5Vtn1T_YbK4W1)

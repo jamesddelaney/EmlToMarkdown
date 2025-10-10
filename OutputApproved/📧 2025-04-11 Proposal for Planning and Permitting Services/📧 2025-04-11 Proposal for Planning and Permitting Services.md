@@ -45,4 +45,4 @@ Santa Barbara, CA 93150
 
 805.637.4306
 
-[www.banksplanning.com](<http://www.banksplanning.com/>)
+[www.banksplanning.com](http://www.banksplanning.com/)

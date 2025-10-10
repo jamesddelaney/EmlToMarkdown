@@ -30,24 +30,34 @@ tags: [email]
 
 Hey all,
 
-Thank you to everyone that attended the _Reclaim Your Time With AI_ workshop today! If you weren’t able to join us or would like a refresher on the content, I’ve included a link to the [recording here](<https://www.youtube.com/watch?v=4BTkWL_GOkk>)
+Thank you to everyone that attended the _Reclaim Your Time With AI_ workshop today! If you weren't able to join us or would like a refresher on the content, I've included a link to the [recording here](https://www.youtube.com/watch?v=4BTkWL_GOkk)
 
-and attached a PDF of the presentation for reference. We have access to this recording for one week, so if you’d like to review, please feel free to do so by 4/17.
+and attached a PDF of the presentation for reference. We have access to this recording for one week, so if you'd like to review, please feel free to do so by 4/17.
 
 If you have any questions, please reach out. Have a great rest of the week!
 
 Thanks,
 
-![](https://storage-use.letsignit.com/6329eb601e3b0c1eb0db4157/generated/effects_3eea07f6d07daede91823a96e81a9823d6a32b40bfb28e572f2ddea1.png)
----
-|  **Amy Delphia**
----
-|  she/her
----
-|  Director of Training & Development
----
-![](https://storage-use.letsignit.com/6329eb601e3b0c1eb0db4157/generated/effects_68b06ec411fd21b17fde96c1c35f7765c21ae738129def76665dfec6.png)
+| ----- |
 |
----
 
----
+![](https://storage-use.letsignit.com/6329eb601e3b0c1eb0db4157/generated/effects_3eea07f6d07daede91823a96e81a9823d6a32b40bfb28e572f2ddea1.png)
+
+ |
+|   |
+|   |
+|
+
+|
+
+Director of Training & Development
+
+ |
+
+ |
+|
+
+![](https://storage-use.letsignit.com/6329eb601e3b0c1eb0db4157/generated/effects_68b06ec411fd21b17fde96c1c35f7765c21ae738129def76665dfec6.png)
+
+ |
+|   |

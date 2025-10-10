@@ -1,0 +1,120 @@
+# Cursor Rules for EmlToMarkdown Project
+
+## Project Context
+This is an email-to-markdown conversion tool. The maintainer only works on this project when there are **parsing issues** with new emails.
+
+## Core Workflow Principles
+
+### 1. **Never Auto-Commit Without User Approval**
+- ALWAYS wait for explicit user approval before committing
+- User must manually review all changes to parser logic
+- User must manually approve new test baselines
+
+### 2. **Iterative Debugging Workflow**
+When user adds a new EML file, follow this sequence:
+
+1. **Identify the Problem**
+   - Run: `DEBUG=true OUTPUT_DIR=OutputTesting SKIP_OBSIDIAN=true ./eml_to_obsidian.sh "Examples/NewEmail.eml"`
+   - Compare output to the PDF reference (if provided)
+   - Identify specific parsing issues (date, attachments, formatting, etc.)
+
+2. **Propose Fixes**
+   - Analyze the parser code (`email_to_markdown.py`, `eml_to_obsidian.sh`)
+   - Suggest specific code changes to fix the issue
+   - Explain WHY the fix will work
+   - Get user approval before making changes
+
+3. **Test the Fix**
+   - Apply the fix
+   - Rerun the test command
+   - Show the diff between old and new output
+   - Verify it matches the PDF reference
+
+4. **Regression Testing**
+   - Run: `./eml_to_obsidian_test.sh`
+   - If tests fail, analyze what broke
+   - Suggest refinements to the fix
+   - Repeat until all tests pass
+
+5. **Manual Approval Required**
+   - Ask user to review: `./eml_to_obsidian_test.sh --show-diff`
+   - Wait for user to approve: `./eml_to_obsidian_test.sh --interactive`
+   - Only then prepare commit
+
+### 3. **Common Parsing Issues**
+- **Date parsing**: Look for date format extraction in shell script regex
+- **Duplicate attachments**: Check attachment vs embedded image logic
+- **Missing images**: Verify CID reference handling
+- **Filename issues**: Check for spaces, newlines, special characters
+- **HTML formatting**: Review html2text conversion settings
+
+### 4. **Testing Commands to Use**
+```bash
+# Initial test with debug output
+DEBUG=true OUTPUT_DIR=OutputTesting SKIP_OBSIDIAN=true ./eml_to_obsidian.sh "Examples/Email.eml"
+
+# Check logs
+tail -50 /tmp/email_to_md_debug.log
+
+# Regression test
+./eml_to_obsidian_test.sh
+
+# Show what changed
+./eml_to_obsidian_test.sh --show-diff
+
+# Clean slate
+./eml_to_obsidian_test.sh --clean
+```
+
+### 5. **Git Workflow**
+- Pre-commit hook runs ALL tests automatically
+- Only commit after user explicitly approves changes
+- Include descriptive commit messages explaining what was fixed
+- Example:
+  ```bash
+  git commit -m "Fix date parsing for 'DD Mon YYYY' format
+  
+  - Added test case: NewEmail.eml
+  - Fixed regex in eml_to_obsidian.sh line 48
+  - All 8 regression tests pass"
+  ```
+
+### 6. **Code Quality Standards**
+- Maintain 100% test pass rate before any commit
+- Add new emails as regression tests
+- Keep parser logic simple and maintainable
+- Document any complex parsing logic with comments
+- Preserve existing functionality when fixing issues
+
+### 7. **When User Says "commit this"**
+DO NOT automatically commit. Instead:
+1. Show what will be committed: `git status`
+2. Show the diff: `git diff --cached`
+3. Confirm tests pass: `./eml_to_obsidian_test.sh`
+4. Ask: "Ready to commit with this message: [proposed message]?"
+5. Only commit after explicit approval
+
+### 8. **Future Automation Goals**
+The user wants a streamlined workflow:
+- Drop EML + PDF into Examples/
+- Run one command to auto-fix parser
+- System compares markdown to PDF
+- Suggests parser improvements
+- User approves and commits
+
+Help work toward this vision when making changes.
+
+## Key Files
+- `email_to_markdown.py` - Core Python parser logic
+- `eml_to_obsidian.sh` - Shell wrapper with date parsing
+- `email_template.j2` - Jinja2 template for markdown output
+- `eml_to_obsidian_test.sh` - Regression test runner
+- `Examples/*.eml` - Test emails
+- `OutputApproved/` - Approved baseline outputs
+- `OutputTesting/` - Temporary test output (gitignored)
+- `.git/hooks/pre-commit` - Runs tests before commits
+- `.git/hooks/post-commit` - Deploys to Production/
+
+## Remember
+**The user is debugging parser issues. Be methodical, test thoroughly, and ALWAYS get explicit approval before committing.**
+

@@ -45,7 +45,7 @@ echo "Email date string: $EMAIL_DATE" >> "$LOG_FILE"
 FORMATTED_DATE=$(date "+%Y-%m-%d")  # Default to current date
 if [ -n "$EMAIL_DATE" ]; then
     # Extract just the date part (day month year) from the email date
-    DATE_PART=$(echo "$EMAIL_DATE" | sed 's/.*\([0-9][0-9]* [A-Za-z][a-z][a-z] [0-9][0-9][0-9][0-9]\).*/\1/')
+    DATE_PART=$(echo "$EMAIL_DATE" | sed 's/.*,[ ]*\([0-9][0-9]* [A-Za-z][a-z][a-z] [0-9][0-9][0-9][0-9]\).*/\1/')
     echo "Trying to parse date: $EMAIL_DATE" >> "$LOG_FILE"
     echo "Extracted date part: $DATE_PART" >> "$LOG_FILE"
     

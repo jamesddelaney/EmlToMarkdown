@@ -25,8 +25,8 @@ import os
 import email
 from email.parser import Parser
 from email.header import decode_header
-import html2text
-from bs4 import BeautifulSoup
+import subprocess
+import shutil
 from jinja2 import Template
 import re
 import logging
@@ -242,21 +242,21 @@ tags: [email]
 
 def _setup_logging():
     """Setup logging configuration."""
-    log_level = logging.DEBUG if os.environ.get('DEBUG', '').lower() == 'true' else logging.INFO
+log_level = logging.DEBUG if os.environ.get('DEBUG', '').lower() == 'true' else logging.INFO
     
-    logging.basicConfig(
+logging.basicConfig(
         filename=LOG_FILE_PATH,
-        level=log_level,
-        format="%(asctime)s - %(levelname)s - %(message)s"
-    )
-    
-    # Add console handler if DEBUG is enabled
-    if os.environ.get('DEBUG', '').lower() == 'true':
-        console = logging.StreamHandler()
-        console.setLevel(logging.DEBUG)
-        formatter = logging.Formatter('%(levelname)s: %(message)s')
-        console.setFormatter(formatter)
-        logging.getLogger('').addHandler(console)
+    level=log_level,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
+# Add console handler if DEBUG is enabled
+if os.environ.get('DEBUG', '').lower() == 'true':
+    console = logging.StreamHandler()
+    console.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(levelname)s: %(message)s')
+    console.setFormatter(formatter)
+    logging.getLogger('').addHandler(console)
 
 # Setup logging
 _setup_logging()
@@ -456,7 +456,7 @@ def extract_attachments(msg, attachment_dir=None):
         attachment_info = _process_email_part(part, saved_files)
         if not attachment_info:
             continue
-            
+        
         # Save the attachment
         if _save_attachment(attachment_info, attachment_dir, saved_files):
             original_attachments.append(attachment_info['original_filename'])
@@ -477,39 +477,49 @@ def extract_attachments(msg, attachment_dir=None):
     return sanitized_attachments, cid_map, filename_map
 
 def html_to_markdown(html_content):
-    """Convert HTML to Markdown preserving links."""
+    """Convert HTML to Markdown using Gather CLI with Readability."""
     if not html_content:
         return ""
     
-    # Clean up HTML first with BeautifulSoup
     try:
-        soup = BeautifulSoup(html_content, 'html.parser')
+        # Check if gather is installed
+        gather_path = shutil.which('gather')
+        if not gather_path:
+            logging.error("Gather CLI not found! Please install it with: brew install gather-cli")
+            logging.error("Returning empty body - conversion cannot proceed without Gather CLI")
+            return "ERROR: Gather CLI not installed. Install with: brew tap ttscoff/thelab && brew install gather-cli"
         
-        # Remove script and style elements
-        for script in soup(["script", "style"]):
-            script.extract()
+        # Use Gather CLI to convert HTML to Markdown with Readability
+        # Readability automatically handles: script removal, style removal, hidden elements, table layouts
+        logging.info("Using Gather CLI with Readability for HTML conversion")
         
-        # Get clean HTML
-        clean_html = str(soup)
+        # Run gather with: --html --stdin --inline-links --no-paragraph-links --no-include-source --no-include-title
+        result = subprocess.run(
+            [gather_path, '--html', '--stdin', '--inline-links', '--no-paragraph-links', 
+             '--no-include-source', '--no-include-title'],
+            input=html_content,
+            text=True,
+            capture_output=True,
+            timeout=30
+        )
         
-        # Convert to markdown using html2text
-        h = html2text.HTML2Text()
-        h.ignore_links = False
-        h.body_width = 0  # Don't wrap text
-        h.protect_links = True  # Don't wrap links
-        h.unicode_snob = True  # Use Unicode instead of ASCII
-        h.mark_code = True
-        h.wrap_links = False
+        if result.returncode != 0:
+            logging.error(f"Gather CLI returned error: {result.stderr}")
+            return f"ERROR: Gather CLI failed. stderr: {result.stderr}"
         
-        markdown = h.handle(clean_html)
+        markdown = result.stdout
         
         # Clean up excessive newlines
         markdown = re.sub(r'\n{3,}', '\n\n', markdown)
         
-        return markdown
+        return markdown.strip()
+        
+    except subprocess.TimeoutExpired:
+        logging.error("Gather CLI timed out after 30 seconds")
+        return "ERROR: Gather CLI timed out"
     except Exception as e:
-        logging.error(f"Error converting HTML to Markdown: {e}")
-        return html_content  # Return original content if conversion fails
+        logging.error(f"Error using Gather CLI: {e}")
+        return f"ERROR: {str(e)}"
 
 # =============================================================================
 # MAIN CONVERSION FUNCTIONS
