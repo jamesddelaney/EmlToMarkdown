@@ -483,10 +483,22 @@ def html_to_markdown(html_content):
     
     try:
         # Check if gather is installed
-        gather_path = shutil.which('gather')
+        # Try common installation paths (Hazel doesn't inherit shell PATH)
+        gather_paths = [
+            shutil.which('gather'),  # Try PATH first
+            '/opt/homebrew/bin/gather',  # Apple Silicon Homebrew
+            '/usr/local/bin/gather',  # Intel Homebrew
+        ]
+        
+        gather_path = None
+        for path in gather_paths:
+            if path and os.path.isfile(path):
+                gather_path = path
+                break
+        
         if not gather_path:
             logging.error("Gather CLI not found! Please install it with: brew install gather-cli")
-            logging.error("Returning empty body - conversion cannot proceed without Gather CLI")
+            logging.error("Searched paths: " + ", ".join([p for p in gather_paths if p]))
             return "ERROR: Gather CLI not installed. Install with: brew tap ttscoff/thelab && brew install gather-cli"
         
         # Use Gather CLI to convert HTML to Markdown with Readability
