@@ -115,6 +115,26 @@ Help work toward this vision when making changes.
 - `.git/hooks/pre-commit` - Runs tests before commits
 - `.git/hooks/post-commit` - Deploys to Production/
 
+### 9. **Efficiency Rules**
+- **Test syntax before making changes**: Run `python3 -c "import module"` to verify code loads before debugging
+- **Use unit tests to isolate problems**: Create focused tests to understand root causes (don't guess!)
+- **Check dependencies first**: When tools don't work, verify they're installed (`which gather`, `pip list`)
+- **Read shell scripts carefully**: Understand how environment variables vs arguments work before debugging
+- **Consider alternative tools early**: If a library has fundamental limitations, research better alternatives immediately
+- **Don't thrash on fixes**: If 2-3 attempts don't work, stop and analyze the root cause with tests
+
+### 10. **Testing Best Practices**
+- **Always verify test commands work**: The README says `OUTPUT_DIR=OutputTesting` but shell script uses `$2` argument
+- **Create minimal reproducible tests**: Isolate HTML conversion, date parsing, etc. in separate test files
+- **Test with actual data**: Use real email examples, not synthetic test cases
+- **Check logs immediately**: Don't assume code worked - verify with debug logs first
+
+### 11. **When Stuck on a Problem**
+1. **Stop and understand the system** - Trace the full execution flow
+2. **Create unit tests** - Isolate the failing component
+3. **Research alternatives** - Don't fight broken tools, find better ones
+4. **Get user input** - Ask "is this our code or library limitation?"
+
 ## Remember
 **The user is debugging parser issues. Be methodical, test thoroughly, and ALWAYS get explicit approval before committing.**
 
