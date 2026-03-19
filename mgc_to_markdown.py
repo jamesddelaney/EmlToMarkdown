@@ -20,6 +20,7 @@ import logging
 import os
 import subprocess
 import sys
+import traceback
 import base64
 import re
 from datetime import datetime
@@ -268,3 +269,50 @@ def download_attachments(attachments, attachment_dir):
             logging.info(f"Saved attachment: {filepath}")
         except Exception as e:
             logging.error(f"Failed to save attachment {name}: {e}")
+
+
+# =============================================================================
+# CLI ENTRY POINT
+# =============================================================================
+
+
+def main():
+    """Fetch email via mgc and print Markdown to stdout."""
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Convert M365 email to Markdown via mgc")
+    parser.add_argument("--message-id", required=True, help="Graph API message ID")
+    parser.add_argument("--user-id", required=True, help="M365 user email address")
+    args = parser.parse_args()
+
+    message_id = args.message_id
+    user_id = args.user_id
+    output_dir = os.environ.get("OUTPUT_DIR")
+    template_path = os.environ.get("TEMPLATE_PATH")
+
+    try:
+        logging.info(f"Fetching message {message_id} for {user_id}")
+        message = fetch_message(message_id, user_id)
+
+        attachments = []
+        if message.get("hasAttachments"):
+            logging.info("Fetching attachments list")
+            attachments = fetch_attachments_list(message_id, user_id)
+
+            if output_dir:
+                attachment_dir = os.path.join(output_dir, "attachments")
+                download_attachments(attachments, attachment_dir)
+
+        markdown = convert_mgc_json_to_markdown(message, attachments, template_path)
+        print(markdown)
+        return 0
+
+    except Exception as e:
+        logging.error(f"Error converting message: {e}")
+        logging.error(traceback.format_exc())
+        print(f"ERROR: {e}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

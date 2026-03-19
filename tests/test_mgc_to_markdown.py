@@ -13,6 +13,7 @@ from mgc_to_markdown import (
     fetch_message,
     fetch_attachments_list,
     download_attachments,
+    main,
 )
 
 FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures")
@@ -213,3 +214,31 @@ class TestDownloadAttachments:
         with tempfile.TemporaryDirectory() as tmpdir:
             download_attachments(attachments, tmpdir)
             assert not os.path.exists(os.path.join(tmpdir, "logo.png"))
+
+
+# =============================================================================
+# Test main()
+# =============================================================================
+
+
+class TestMain:
+    def test_main_outputs_markdown(self, monkeypatch, tmp_path, capsys):
+        mock_message = load_fixture("sample_mgc_message.json")
+        mock_attachments = load_fixture("sample_mgc_attachments.json")
+
+        monkeypatch.setenv("OUTPUT_DIR", str(tmp_path))
+
+        with patch("mgc_to_markdown.fetch_message", return_value=mock_message), \
+             patch("mgc_to_markdown.fetch_attachments_list", return_value=mock_attachments["value"]), \
+             patch("mgc_to_markdown.download_attachments"):
+
+            monkeypatch.setattr(
+                "sys.argv",
+                ["mgc_to_markdown.py", "--message-id", "TEST_ID", "--user-id", "user@example.com"]
+            )
+            exit_code = main()
+
+        captured = capsys.readouterr()
+        assert exit_code == 0
+        assert "Test Email from M365" in captured.out
+        assert "---" in captured.out
