@@ -92,3 +92,76 @@ def parse_mgc_date(iso_datetime):
         logging.warning(f"Could not parse date: {iso_datetime}, using current time")
         now = datetime.now()
         return now.strftime("%Y-%m-%d"), now.strftime("%H:%M")
+
+
+# =============================================================================
+# MAIN CONVERSION (pure function — no subprocess)
+# =============================================================================
+
+
+def convert_mgc_json_to_markdown(message, attachments=None, template_path=None):
+    """Convert a Graph API message dict to Obsidian Markdown.
+
+    Args:
+        message: Parsed JSON dict from `mgc users messages get`
+        attachments: Optional list of attachment dicts from `mgc users messages attachments list`
+                     (the "value" array). Pass None or [] if no attachments.
+        template_path: Optional path to a custom Jinja2 template. Uses email_template.j2 if None.
+
+    Returns:
+        str: Rendered Markdown string
+    """
+    logging.info(f"Converting mgc message: {message.get('subject', '(no subject)')}")
+
+    if attachments is None:
+        attachments = []
+
+    # --- Field mapping ---
+    subject = message.get("subject", "")
+    from_addr = format_recipient([message.get("from", {})])
+    to_addr = format_recipient(message.get("toRecipients", []))
+    cc_addr = format_recipient(message.get("ccRecipients", []))
+    formatted_date, formatted_time = parse_mgc_date(message.get("sentDateTime", ""))
+    message_id = message.get("internetMessageId", "").strip("<>")
+    message_url = f"message://%3c{message_id}%3e" if message_id else ""
+
+    # --- Body conversion ---
+    body_obj = message.get("body", {})
+    content_type = body_obj.get("contentType", "text").lower()
+    content = body_obj.get("content", "")
+
+    if content_type == "html":
+        body = html_to_markdown(content)
+    else:
+        body = content
+
+    # Normalize excessive whitespace
+    body = re.sub(r"\n\s*\n\s*\n", "\n\n", body)
+    body = re.sub(r" +\n", "\n", body)
+
+    # --- Attachment filenames ---
+    # Only include non-inline attachments in the Markdown attachments list
+    attachment_filenames = [
+        a["name"] for a in attachments
+        if not a.get("isInline", False) and "name" in a
+    ]
+
+    # --- Template rendering ---
+    template_string = _load_template(template_path)
+    template = Template(template_string)
+    markdown = template.render(
+        subject=subject,
+        from_addr=from_addr,
+        to_addr=to_addr,
+        cc_addr=cc_addr,
+        formatted_date=formatted_date,
+        formatted_time=formatted_time,
+        message_url=message_url,
+        eml_file="",  # No EML file in mgc path
+        attachments=attachment_filenames,
+        filename_map={},
+        body=body,
+    )
+
+    logging.info("mgc message conversion completed successfully")
+    return markdown

@@ -58,3 +58,55 @@ class TestParseMgcDate:
     def test_empty_string_returns_today(self):
         date, time = parse_mgc_date("")
         assert date == datetime.now().strftime("%Y-%m-%d")
+
+
+# =============================================================================
+# Test convert_mgc_json_to_markdown()
+# =============================================================================
+
+
+from mgc_to_markdown import convert_mgc_json_to_markdown
+
+
+class TestConvertMgcJsonToMarkdown:
+    def setup_method(self):
+        self.message = load_fixture("sample_mgc_message.json")
+
+    def test_subject_in_output(self):
+        result = convert_mgc_json_to_markdown(self.message)
+        assert "Test Email from M365" in result
+
+    def test_from_addr_in_output(self):
+        result = convert_mgc_json_to_markdown(self.message)
+        assert "John Sender" in result
+        assert "john@example.com" in result
+
+    def test_to_addr_in_output(self):
+        result = convert_mgc_json_to_markdown(self.message)
+        assert "jane@example.com" in result
+
+    def test_cc_addr_in_output(self):
+        result = convert_mgc_json_to_markdown(self.message)
+        assert "bob@example.com" in result
+
+    def test_date_in_output(self):
+        result = convert_mgc_json_to_markdown(self.message)
+        assert "2025-01-15" in result
+
+    def test_body_content_converted(self):
+        result = convert_mgc_json_to_markdown(self.message)
+        # HTML was converted — the link text and URL should appear
+        assert "test email" in result
+        assert "https://example.com" in result
+
+    def test_yaml_frontmatter_present(self):
+        result = convert_mgc_json_to_markdown(self.message)
+        assert result.startswith("---")
+        assert "EmailSubject:" in result
+        assert "tags: [email]" in result
+
+    def test_plain_text_body(self):
+        msg = dict(self.message)
+        msg["body"] = {"contentType": "text", "content": "Plain text body here."}
+        result = convert_mgc_json_to_markdown(msg)
+        assert "Plain text body here." in result
