@@ -22,7 +22,7 @@ import subprocess
 import sys
 import base64
 import re
-from datetime import datetime, timezone
+from datetime import datetime
 
 # Import shared utilities from EML path — html_to_markdown and _load_template.
 # IMPORTANT: email_to_markdown calls _setup_logging() (i.e. logging.basicConfig)

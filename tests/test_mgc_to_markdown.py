@@ -4,7 +4,7 @@ import os
 import pytest
 from datetime import datetime
 
-from mgc_to_markdown import format_recipient, parse_mgc_date
+from mgc_to_markdown import format_recipient, parse_mgc_date, convert_mgc_json_to_markdown
 
 FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures")
 
@@ -63,9 +63,6 @@ class TestParseMgcDate:
 # =============================================================================
 # Test convert_mgc_json_to_markdown()
 # =============================================================================
-
-
-from mgc_to_markdown import convert_mgc_json_to_markdown
 
 
 class TestConvertMgcJsonToMarkdown:
