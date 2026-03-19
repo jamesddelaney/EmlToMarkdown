@@ -2,9 +2,18 @@
 import json
 import os
 import pytest
+import tempfile
 from datetime import datetime
+from unittest.mock import patch, MagicMock
 
-from mgc_to_markdown import format_recipient, parse_mgc_date, convert_mgc_json_to_markdown
+from mgc_to_markdown import (
+    format_recipient,
+    parse_mgc_date,
+    convert_mgc_json_to_markdown,
+    fetch_message,
+    fetch_attachments_list,
+    download_attachments,
+)
 
 FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures")
 
@@ -107,3 +116,100 @@ class TestConvertMgcJsonToMarkdown:
         msg["body"] = {"contentType": "text", "content": "Plain text body here."}
         result = convert_mgc_json_to_markdown(msg)
         assert "Plain text body here." in result
+
+
+# =============================================================================
+# Test fetch_message()
+# =============================================================================
+
+
+class TestFetchMessage:
+    def test_returns_parsed_json(self):
+        mock_message = load_fixture("sample_mgc_message.json")
+        mock_result = MagicMock()
+        mock_result.stdout = json.dumps(mock_message)
+        mock_result.returncode = 0
+
+        with patch("mgc_to_markdown.subprocess.run", return_value=mock_result) as mock_run:
+            result = fetch_message("MSG_ID", "user@example.com")
+
+        assert result["subject"] == "Test Email from M365"
+        # Verify the correct mgc command was constructed
+        called_args = mock_run.call_args[0][0]  # First positional arg (the cmd list)
+        assert "users" in called_args
+        assert "messages" in called_args
+        assert "get" in called_args
+        assert "--message-id" in called_args
+        assert "MSG_ID" in called_args
+        assert "--user-id" in called_args
+        assert "user@example.com" in called_args
+
+    def test_raises_on_nonzero_exit(self):
+        mock_result = MagicMock()
+        mock_result.returncode = 1
+        mock_result.stderr = "Error: not authenticated"
+
+        with patch("mgc_to_markdown.subprocess.run", return_value=mock_result):
+            with pytest.raises(RuntimeError, match="mgc failed"):
+                fetch_message("MSG_ID", "user@example.com")
+
+
+# =============================================================================
+# Test fetch_attachments_list()
+# =============================================================================
+
+
+class TestFetchAttachmentsList:
+    def test_returns_value_array(self):
+        mock_data = load_fixture("sample_mgc_attachments.json")
+        mock_result = MagicMock()
+        mock_result.stdout = json.dumps(mock_data)
+        mock_result.returncode = 0
+
+        with patch("mgc_to_markdown.subprocess.run", return_value=mock_result):
+            result = fetch_attachments_list("MSG_ID", "user@example.com")
+
+        assert len(result) == 1
+        assert result[0]["name"] == "report.pdf"
+
+    def test_returns_empty_list_when_no_attachments(self):
+        mock_result = MagicMock()
+        mock_result.stdout = json.dumps({"value": []})
+        mock_result.returncode = 0
+
+        with patch("mgc_to_markdown.subprocess.run", return_value=mock_result):
+            result = fetch_attachments_list("MSG_ID", "user@example.com")
+
+        assert result == []
+
+
+# =============================================================================
+# Test download_attachments()
+# =============================================================================
+
+
+class TestDownloadAttachments:
+    def test_saves_attachment_file(self):
+        attachments = load_fixture("sample_mgc_attachments.json")["value"]
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            download_attachments(attachments, tmpdir)
+            saved_path = os.path.join(tmpdir, "report.pdf")
+            assert os.path.exists(saved_path)
+            # contentBytes is "JVBERi0xLjQ=" — verify file was written
+            assert os.path.getsize(saved_path) > 0
+
+    def test_skips_inline_attachments(self):
+        attachments = [
+            {
+                "id": "inline001",
+                "name": "logo.png",
+                "contentType": "image/png",
+                "isInline": True,
+                "contentBytes": "iVBORw==",
+                "@odata.type": "#microsoft.graph.fileAttachment",
+            }
+        ]
+        with tempfile.TemporaryDirectory() as tmpdir:
+            download_attachments(attachments, tmpdir)
+            assert not os.path.exists(os.path.join(tmpdir, "logo.png"))

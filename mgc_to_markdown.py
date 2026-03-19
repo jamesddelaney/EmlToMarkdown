@@ -165,3 +165,101 @@ def convert_mgc_json_to_markdown(message, attachments=None, template_path=None):
 
     logging.info("mgc message conversion completed successfully")
     return markdown
+
+
+# =============================================================================
+# MGC SUBPROCESS LAYER
+# =============================================================================
+
+
+def _run_mgc(args):
+    """Run a mgc command and return parsed JSON output.
+
+    Args:
+        args: List of mgc arguments (not including 'mgc' itself)
+
+    Returns:
+        dict or list: Parsed JSON response
+
+    Raises:
+        RuntimeError: If mgc exits with a non-zero status
+    """
+    cmd = [MGC_PATH] + args + ["--output", "json"]
+    logging.debug(f"Running mgc command: {' '.join(cmd)}")
+
+    result = subprocess.run(cmd, capture_output=True, text=True)
+
+    if result.returncode != 0:
+        raise RuntimeError(
+            f"mgc failed (exit {result.returncode}): {result.stderr.strip()}"
+        )
+
+    return json.loads(result.stdout)
+
+
+def fetch_message(message_id, user_id):
+    """Fetch a single message from Microsoft 365 via mgc.
+
+    Args:
+        message_id: The Graph API message ID
+        user_id: The M365 user email address (e.g., "you@company.com")
+
+    Returns:
+        dict: Parsed message JSON from Graph API
+    """
+    return _run_mgc([
+        "users", "messages", "get",
+        "--message-id", message_id,
+        "--user-id", user_id,
+    ])
+
+
+def fetch_attachments_list(message_id, user_id):
+    """Fetch the list of attachments for a message.
+
+    Args:
+        message_id: The Graph API message ID
+        user_id: The M365 user email address
+
+    Returns:
+        list: List of attachment dicts from the Graph API "value" array
+    """
+    data = _run_mgc([
+        "users", "messages", "attachments", "list",
+        "--message-id", message_id,
+        "--user-id", user_id,
+    ])
+    return data.get("value", [])
+
+
+def download_attachments(attachments, attachment_dir):
+    """Save non-inline file attachments to disk.
+
+    Decodes base64 contentBytes from the Graph API attachment objects.
+    Skips inline attachments (isInline=True) — these are typically embedded images.
+
+    Args:
+        attachments: List of attachment dicts (from fetch_attachments_list)
+        attachment_dir: Directory path to save files into
+    """
+    os.makedirs(attachment_dir, exist_ok=True)
+
+    for attachment in attachments:
+        if attachment.get("isInline", False):
+            logging.info(f"Skipping inline attachment: {attachment.get('name')}")
+            continue
+
+        name = attachment.get("name", "attachment")
+        content_bytes_b64 = attachment.get("contentBytes", "")
+
+        if not content_bytes_b64:
+            logging.warning(f"No contentBytes for attachment: {name}")
+            continue
+
+        filepath = os.path.join(attachment_dir, name)
+        try:
+            with open(filepath, "wb") as f:
+                f.write(base64.b64decode(content_bytes_b64))
+            logging.info(f"Saved attachment: {filepath}")
+        except Exception as e:
+            logging.error(f"Failed to save attachment {name}: {e}")
