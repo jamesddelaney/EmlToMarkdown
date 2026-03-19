@@ -1,0 +1,13 @@
+{
+  "value": [
+    {
+      "id": "AAMkAGIattach001",
+      "name": "report.pdf",
+      "contentType": "application/pdf",
+      "size": 1024,
+      "isInline": false,
+      "contentBytes": "JVBERi0xLjQ=",
+      "@odata.type": "#microsoft.graph.fileAttachment"
+    }
+  ]
+}

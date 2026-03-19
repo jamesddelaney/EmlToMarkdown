@@ -1,0 +1,23 @@
+{
+  "id": "AAMkAGItest001",
+  "subject": "Test Email from M365",
+  "sentDateTime": "2025-01-15T22:30:00Z",
+  "from": {
+    "emailAddress": {
+      "name": "John Sender",
+      "address": "john@example.com"
+    }
+  },
+  "toRecipients": [
+    {"emailAddress": {"name": "Jane Recipient", "address": "jane@example.com"}}
+  ],
+  "ccRecipients": [
+    {"emailAddress": {"name": "Bob CC", "address": "bob@example.com"}}
+  ],
+  "body": {
+    "contentType": "html",
+    "content": "<html><body><p>Hello, this is a <b>test email</b> with a <a href=\"https://example.com\">link</a>.</p></body></html>"
+  },
+  "hasAttachments": true,
+  "internetMessageId": "<test-message-id-001@mail.example.com>"
+}
