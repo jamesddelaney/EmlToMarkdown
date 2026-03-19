@@ -194,7 +194,12 @@ def _run_mgc(args):
             f"mgc failed (exit {result.returncode}): {result.stderr.strip()}"
         )
 
-    return json.loads(result.stdout)
+    try:
+        return json.loads(result.stdout)
+    except json.JSONDecodeError as e:
+        raise RuntimeError(
+            f"mgc returned non-JSON output: {e}\nStdout: {result.stdout[:200]}"
+        ) from e
 
 
 def fetch_message(message_id, user_id):
